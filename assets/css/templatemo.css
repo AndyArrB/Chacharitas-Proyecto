@@ -70,8 +70,8 @@ body, ul, li, p, a, label, input, div {
 /* Nav */
 #templatemo_nav_top { min-height: 40px;}
 #templatemo_nav_top * { font-size: .9em !important;}
-#templatemo_main_nav a { color: #212934;}
-#templatemo_main_nav a:hover { color: #69bb7e;}
+#templatemo_main_nav a { color: #ffffff;}
+#templatemo_main_nav a:hover { color: #000000;}
 #templatemo_main_nav .navbar .nav-icon { margin-right: 20px;}
 
 /* Hero Carousel */
@@ -92,7 +92,7 @@ body, ul, li, p, a, label, input, div {
   background: rgba(0,0,0,.2);
   visibility: hidden;
   opacity: 0;
-  transition: .3s;
+  transition: .6s;
 }
 .card.product-wap:hover .card .product-overlay {
   visibility: visible;

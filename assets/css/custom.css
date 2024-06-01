@@ -1,3 +1,20 @@
 /*
 Custom Css
 */
+
+a.navbar-brand.custome-text-color.logo.h1.align-self-center {
+    color: rgb(255, 255, 255);
+}
+
+.custome-bg-navbar {
+    background-color: rgb(255, 175, 255);
+}
+
+.custome-bg-navbar-about {
+    background-color: rgb(190, 255, 175);
+}
+
+.custome-text-color 
+{
+    color: white;
+}
