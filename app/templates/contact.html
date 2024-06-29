@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block styles %}
+
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/img/c.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/c.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.min.css') }}">
+
+    <!-- Load map styles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+
+{% endblock %}
+
+{% block body %}
+
+    <!-- Start Content Page -->
+    <div class="container-fluid bg-light py-5">
+        <div class="col-md-6 m-auto text-center">
+            <h1 class="h1">¡Contáctanos!</h1>
+            <p>
+                ¿Tienes dudas acerca de la página? ¿Algún error ocurrió? ¿Necesitas apoyo para registrarte?
+                Cuentanos, estamos aquí para ayudarte.
+            </p>
+        </div>
+    </div>
+
+    <!-- Start Contact -->
+    <div class="container py-5">
+        <div class="row py-5">
+            <form class="col-md-9 m-auto" method="post" role="form">
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="inputname">Nombre</label>
+                        <input type="text" class="form-control mt-1" id="nombre" name="nombre"
+                               placeholder="Ingresa aquí" autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="inputemail">Correo electrónico</label>
+                        <input type="email" class="form-control mt-1" id="correo" name="correo"
+                               placeholder="Ingresa aquí" autocomplete="off">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="inputsubject">Asunto</label>
+                    <input type="text" class="form-control mt-1" id="asunto" name="asunto"
+                           placeholder="¿Cuál es tu duda? ¿En qué podemos ayudarte?" autocomplete="off">
+                </div>
+                <div class="mb-3">
+                    <label for="inputmessage">Mensaje</label>
+                    <textarea class="form-control mt-1" id="mensaje" name="mensaje"
+                              placeholder="Cuentanos a detalle lo sucedido..." rows="8" autocomplete="off"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col text-end mt-2">
+                        <button type="submit" class="btn btn-success btn-lg px-3">Enviar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Contact -->
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Start Script -->
+
+    <!-- End Script -->
+{% endblock %}

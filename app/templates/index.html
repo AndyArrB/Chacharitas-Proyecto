@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block styles %}
+
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+    <link rel="shortcut icon" type="image/x-icon"
+          href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.min.css') }}">
+    <!--
+    
+TemplateMo 559 Zay Shop
+
+https://templatemo.com/tm-559-zay-shop
+
+-->
+
+{% endblock %}
+
+
+{% block  body %}
+
+    <!-- Start Banner Hero -->
+    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid"
+                                 src="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left align-self-center">
+                                <h1 class="h1">Vistiendo al futuro con recuerdos sostenibles</h1>
+                                <h3 class="h2">Empresa 100% mexicana</h3>
+                                <p>
+                                    Chacharitas.com es una plataforma web pensada para padres que
+                                    buscan comprar o vender ropa para niños y bebés de segunda mano, de
+                                    esta manera ayudaremos a reducir la contaminación textil y apoyamos en su economía.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{{ url_for('static', filename='assets/img/ods12.png') }}"
+                                 alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Enfocado en el ODS 12</h1>
+                                <h3 class="h2">Producción y consumo responsable</h3>
+                                <p>
+                                    Buscamos fomentar el consumo responsable y comenzar a crear conscienciad de la
+                                    gravedad del problema actual.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{{ url_for('static', filename='assets/img/usa.jpeg') }}" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">La segunda industria más contaminante es la textil</h1>
+                                <h3 class="h2"></h3>
+                                <p>
+                                    En 2023, se gastaron 93 mil millones de metros cúbicos de agua en la producción de
+                                    prendas.
+                                    <br><br>
+                                    Esa es la cantidad suficiente para dar energía a una planta nuclear los siguientes
+                                    12,400 años.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel"
+           role="button" data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel"
+           role="button" data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+    <!-- End Banner Hero -->
+
+
+    <!-- Start Categories of The Month -->
+    <section class="container py-5">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Es hora de hacer un cambio</h1>
+                <p>
+                    De todos los residuos textiles generados, únicamente se recicla el 15%
+                    y el resto se incinera o se tira en vertederos, por ello es importante
+                    tomar consciencia del impacto de la moda "Fast Fashion" así como tomar medidas
+                    para reducir el consumo de ropa.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="{{ url_for('static', filename='assets/img/playera_harry_01.webp') }}"
+                                 class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3">Playeras</h5>
+                <p class="text-center"><a class="btn btn-success">Ver más</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="{{ url_for('static', filename='assets/img/pantalones_03.jpeg') }}"
+                                 class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Pantalones</h2>
+                <p class="text-center"><a class="btn btn-success">Ver más</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="{{ url_for('static', filename='assets/img/sudadera_02.jpg') }}"
+                                 class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Sudaderas</h2>
+                <p class="text-center"><a class="btn btn-success">Ver más</a></p>
+            </div>
+        </div>
+    </section>
+    <!-- End Categories of The Month -->
+
+
+    <!-- Start Featured Product -->
+    <section class="bg-light">
+        <div class="container py-5">
+            <div class="row text-center py-3">
+                <div class="col-lg-6 m-auto">
+                    <h1 class="h1">Productos más vendidos</h1>
+                    <p>
+                        Se estima que la vestimenta de un día normal, equivale a 15,000 litros de agua,
+                        por lo tanto, si queremos tener un futuro próspero, es tiempo de comenzar a reusar y reutilizar.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="shop-single.html">
+                            <img src="{{ url_for('static', filename='assets/img/mameluco_01.avif') }}"
+                                 class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$150.00</li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Mameluco Stich</a>
+                            <p class="card-text">
+                                Pijama Unisex <br>
+                                Al comprar esta prenda, ahorras 2,700 litros en la producción de una nueva. <br> <br>
+                                <small class="text-muted">Talla: Ch/M</small>
+                            </p>
+                            <p class="text-muted">Comentarios (24)</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Otro apartado de productos vendidos -->
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="shop-single.html">
+                            <img src="{{ url_for('static', filename='assets/img/converse_01.jpeg') }}"
+                                 class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <!-- Estrellas de calificación-->
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$500.00</li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Tenis Converse
+                                Blancos</a>
+                            <p class="card-text">
+                                Tenis Unisex <br>
+                                Al comprar estos tenis, ahorras 4,400 litros en la producción de
+                                un par nuevo. <br> <br>
+                                <small class="text-muted">Talla: 25 MX</small>
+                            </p>
+                            <p class="text-muted">Comentarios (48)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="shop-single.html">
+                            <img src="{{ url_for('static', filename='assets/img/pantalones_02.jpeg') }}"
+                                 class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$360.00</li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Pantalón Cargo
+                                Recto</a>
+                            <p class="card-text">
+                                Pantalón de hombre <br>
+                                Al comprar este pantalón, ahorras 7,500 litros en la producción de
+                                uno nuevo. <br> <br>
+                                <small class="text-muted">Talla: 32 MX</small>
+                            </p>
+                            <p class="text-muted">Comentarios (74)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Featured Product -->
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='assets/js/jquery-1.11.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery-migrate-1.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/templatemo.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
+{% endblock %}
