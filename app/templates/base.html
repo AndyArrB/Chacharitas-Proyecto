@@ -4,6 +4,16 @@
     <title>Chacharitas.com</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.min.css') }}">
     {% block styles %}
 
     {% endblock %}
@@ -86,12 +96,20 @@
                     <span
                             class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">3</span>
                 </a>
-                <a class="nav-icon position-relative text-decoration-none" href="{{ url_for('login') }}"
-                   data-bs-target="#loginmodal">
-                    <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                    <span
-                            class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-                </a>
+                <div class="dropdown">
+                    <a class="nav-icon position-relative text-decoration-none dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('register') }}">Registro</a></li>
+                        <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('login') }}">Iniciar Sesión</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{ url_for_security('logout') }}">Cerrar sesión</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
 

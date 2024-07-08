@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block styles %}
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
@@ -12,14 +11,6 @@
     <!-- Style -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.min.css') }}">
-
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/img/c.png') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/c.png') }}">
 {% endblock %}
 
 
@@ -38,16 +29,18 @@
                                     <h3>Ingresa a <strong>Chácharas</strong></h3>
                                     <p class="mb-4">Empieza con tu vida sustentable.</p>
                                 </div>
-                                <form action="#" method="post">
+                                <form action="{{ url_for("login") }}" method="POST">
                                     <div class="form-group first">
                                         <label for="username">Username</label>
                                         <input type="text" class="form-control" id="username" autocomplete="off">
-
+                                    </div>
+                                    <div class="form-group first">
+                                        <label for="">Username</label>
+                                        <input type="text" class="form-control" id="username" autocomplete="off">
                                     </div>
                                     <div class="form-group last mb-4">
                                         <label for="password">Password</label>
                                         <input type="password" class="form-control" id="password" autocomplete="off">
-
                                     </div>
 
                                     <div class="d-flex mb-5 align-items-center">

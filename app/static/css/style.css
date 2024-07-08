@@ -18,7 +18,7 @@ a {
     text-decoration: none !important; }
 
 .content {
-  padding: 7rem 0; }
+  padding: 3.4rem 0; }
 
 h2 {
   font-size: 20px; }
@@ -44,7 +44,6 @@ h2 {
   .content .contents .form-group, .content .bg .form-group {
     position: relative; }
     .content .contents .form-group label, .content .bg .form-group label {
-      position: absolute;
       top: 50%;
       -webkit-transform: translateY(-50%);
       -ms-transform: translateY(-50%);
@@ -206,3 +205,30 @@ h2 {
 .control--checkbox input:disabled:checked ~ .control__indicator {
   background-color: #7e0cf5;
   opacity: .2; }
+
+.control-label {
+  display: none;
+}
+
+.row.justify-content-center {
+  display: flex;
+  align-items: center;
+}
+
+/* Reducción de márgenes y padding */
+.form-block {
+  padding: 35px; /* Reducido desde 60px */
+}
+
+
+
+/* Asegurarse de que el contenedor del formulario se ajuste a la pantalla */
+.row.justify-content-center {
+  min-height: auto; /* Cambiado de 100vh a auto */
+}
+
+.fs-error-msg {
+  color: #d9534f; /* Rojo para indicar error */
+  font-size: 14px; /* Tamaño de fuente adecuado para legibilidad */
+  margin-top: 5px; /* Espacio arriba para separar del input/form */
+}
