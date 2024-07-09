@@ -79,7 +79,7 @@
                 </ul>
             </div>
             <div class="navbar align-self-center d-flex">
-                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-2 col-sm-auto pr-3">
                     <div class="input-group">
                         <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
                         <div class="input-group-text">
@@ -102,11 +102,14 @@
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
 
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('register') }}">Registro</a></li>
+                    <ul class="dropdown-menu " aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item " style="color: black" href="{{ url_for_security('register') }}">Registro</a></li>
                         <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('login') }}">Iniciar Sesión</a></li>
                         {% if current_user.is_authenticated %}
-                            <li><a class="dropdown-item" href="{{ url_for_security('logout') }}">Cerrar sesión</a></li>
+                            <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('logout') }}">Cerrar sesión</a></li>
+                            {% if current_user.has_role('admin') %}
+                                <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('logout') }}">Dashboard Admin</a></li>
+                            {% endif %}
                         {% endif %}
                     </ul>
                 </div>

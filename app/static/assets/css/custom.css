@@ -18,3 +18,17 @@ a.navbar-brand.custome-text-color.logo.h1.align-self-center {
 {
     color: white;
 }
+
+
+
+/* Asegúrate de que el dropdown no se salga de la pantalla */
+.dropdown-menu {
+    position: absolute;
+    transform: translate3d(0, 8px, 0);
+    top: 100;
+    left: -100px;
+    will-change: transform;
+    max-height: calc(100vh - 50px); /* Ajusta la altura máxima para evitar que se salga de la pantalla */
+    overflow-y: auto; /* Permite desplazamiento vertical si el contenido es muy largo */
+}
+

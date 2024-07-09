@@ -16,6 +16,7 @@ SQLALCHEMY_DATABASE_URI = "mssql+pyodbc://@localhost/Chacharitas_2?trusted_conne
 # *
 SECURITY_REGISTERABLE = True
 SECURITY_SEND_REGISTER_EMAIL = False
+SECURITY_JOIN_USER_ROLES = True
 
 #SECURITY_REGISTER_USER_TEMPLATE = "dummy.html"
 #SECURITY_POST_REGISTER_VIEW = "dummy.html"
