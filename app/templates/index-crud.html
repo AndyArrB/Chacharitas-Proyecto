@@ -1,0 +1,128 @@
+<!-- Importamos las funciones de Bootstrap-Flask que nos són útiles -->
+{% from "bootstrap5/form.html" import render_form %}
+
+<!doctype html>
+<html lang="en">
+
+<!-- Estilos insertados y metadatos-->
+<head>
+    <meta charset="utf-8">
+    {{ bootstrap.load_css() }}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/custom_styles.css') }}">
+    <title>Administración</title>
+</head>
+
+
+<body>
+
+<!-- Barra de navegación y panel lateral-->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Administración</a>
+
+        <!-- Botones de la barra de navegación -->
+        <div class="ms-auto">
+            <button type="button" class="btn btn-primary btn-add">
+                <i class="bi bi-database-add icon-large"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-add" onclick="window.location.href='{{ url_for('index') }}'">
+                <i class="bi bi-box-arrow-right icon-large"></i>
+            </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasDarkNavbar"
+                    aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation" href="{{ url_for('index') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+
+        <!-- Panel lateral -->
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+             aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Tablas</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <form class="d-flex mt-1" role="search">
+                        <input id="search" class="form-control me-2" type="search" placeholder="Search"
+                               aria-label="Search">
+                        <button class="btn btn-success" type="submit">Filtrar</button>
+                    </form>
+                    <br>
+
+                    <div class="d-flex flex-wrap">
+                        {% for table in tables %}
+                            <div class="flex-fill w-50">
+                                <li class="nav-item table_name">
+                                    <a class="nav-link active" aria-current="page" href={{ table }}>
+                                        <i class="bi bi-table icon_table"></i>
+                                        {{ table }}
+                                    </a>
+                                </li>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<!-- Tabla -->
+<div id="main_table" class="ag-theme-alpine" data-table-name="{{ table }}"></div>
+
+<!-- Modal -->
+<div id="main_modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modal_form">
+                    {{ render_form(modal_form) }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Scripts insertados -->
+{{ bootstrap.load_js() }}
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!-- Importamos algunas funciones pequeñas pero importantes
+     para el funcionamiento del CRUD en general -->
+<script src="{{ url_for("static", filename="scripts/init.js") }}"></script>
+
+<!-- Importamos las funciones que hacen las solicitudes HTTP
+     Son funciones que son las peticiones hacia las rutas de Flask. -->
+<script src="{{ url_for("static", filename="scripts/requests.js") }}"></script>
+
+<!-- Importamos una clase personalizada para su incorporación en
+     la última columna de la tabla de AgGrid. Son los botones. -->
+<script src="{{ url_for("static", filename="scripts/table_buttons.js") }}"></script>
+
+<!-- Importamos la función encargada de la creación / modificación
+     de la tabla de AgGrid. Este es quien lo renderiza -->
+<script src="{{ url_for('static', filename='scripts/table_addons.js') }}"></script>
+
+<!-- Importamos el código encargado del filtrado de datos en el
+     navbar lateral de la página -->
+<script src="{{ url_for('static', filename='scripts/navbar_search.js') }}"></script>
+
+<!-- Importamos el código que le da un comportamiento AJAX a nuestras
+     peticiones POST y PUT hacia nuestro servidor -->
+<script src="{{ url_for('static', filename='scripts/form_ajax.js') }}"></script>
+
+</body>
+</html>

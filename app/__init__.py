@@ -1,11 +1,11 @@
 from flask import Flask
+from flask_bootstrap import Bootstrap5
 from flask_security.models import fsqla_v3
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import SQLAlchemyUserDatastore, Security, current_user
+from flask_security import SQLAlchemyUserDatastore, Security
 from flask_mailman import Mail
 from app.forms.register import ExtendedRegisterForm
-
-from .config import *
+from app.config import *
 
 # * Creamos la aplicación de Flask
 app = Flask(__name__)
@@ -16,6 +16,7 @@ app.config.from_object("app.config")
 # * Implementamos la conexión hacia nuestra base de datos
 db = SQLAlchemy(app)
 mail = Mail(app)
+bootstrap = Bootstrap5(app)
 
 # * Inyectamos Flask-Security a nuestra base de datos
 fsqla_v3.FsModels.set_db_info(db)

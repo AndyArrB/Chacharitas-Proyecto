@@ -1,0 +1,52 @@
+.navbar {
+    height: 4rem
+}
+
+.icon_table {
+    margin-right: 10px
+}
+
+.icon-large {
+    font-size: 1.3em;
+}
+
+.center-content {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.center-content button {
+    margin-right: 1rem;
+}
+
+.table_name {
+    transition: opacity 0.2s linear;
+}
+
+#main_table {
+    height: 30rem;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.btn-edit {
+    margin-right: 10px;
+    height: 2.1rem;
+    margin-top: 0.2rem;
+}
+
+
+.btn-delete {
+    height: 2.1rem;
+    margin-top: 0.2rem;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+

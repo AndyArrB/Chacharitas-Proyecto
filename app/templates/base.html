@@ -108,7 +108,7 @@
                         {% if current_user.is_authenticated %}
                             <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('logout') }}">Cerrar sesión</a></li>
                             {% if current_user.has_role('admin') %}
-                                <li><a class="dropdown-item" style="color: black" href="{{ url_for_security('logout') }}">Dashboard Admin</a></li>
+                                <li><a class="dropdown-item" style="color: black" href="{{ url_for('index_crud', table="colores") }}">Dashboard Admin</a></li>
                             {% endif %}
                         {% endif %}
                     </ul>
