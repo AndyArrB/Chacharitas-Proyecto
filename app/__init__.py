@@ -3,7 +3,6 @@ from flask_bootstrap import Bootstrap5
 from flask_security.models import fsqla_v3
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import SQLAlchemyUserDatastore, Security
-from flask_mailman import Mail
 from app.forms.register import ExtendedRegisterForm
 from app.config import *
 
@@ -15,7 +14,6 @@ app.config.from_object("app.config")
 
 # * Implementamos la conexión hacia nuestra base de datos
 db = SQLAlchemy(app)
-mail = Mail(app)
 bootstrap = Bootstrap5(app)
 
 # * Inyectamos Flask-Security a nuestra base de datos
@@ -40,14 +38,12 @@ with app.app_context():
     db.create_all()
     try:
 
-        admin_role = user_datastore.find_role("admin")
+        admin_role = user_datastore.find_or_create_role("admin")
         root = user_datastore.find_user(username="root")
 
-        if not admin_role:
-            user_datastore.create_role(name="admin")
-
         if not root:
-            user_datastore.create_user(username="root", password="root", us_phone_number="+524421941945", email="root@gmail.com")
+            root = user_datastore.create_user(username="root", password="root", us_phone_number="+524421941945", email="root@gmail.com")
+            db.session.commit()
 
         user_datastore.add_role_to_user(root, admin_role)
 
