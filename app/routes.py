@@ -1,7 +1,12 @@
-from flask import render_template, request, jsonify
-from flask_security import roles_required
+from datetime import datetime
 
-from app import app
+from flask import render_template, request, jsonify, flash, redirect, url_for
+from flask_login import login_required, current_user
+from flask_mail import Message
+from flask_security import roles_required, send_mail, hash_password
+
+from app import app, ExtendedRegisterForm, User, user_datastore
+from app import mail
 from app.database import Database
 from app.forms.modal_form import generate_dynamic_form
 
@@ -37,10 +42,31 @@ def shop():
     return render_template("shop.html", products=products, genders=genders, categories=categories)
 
 
-@app.route("/contact")
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template("contact.html")
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        asunto = request.form['asunto']
+        mensaje = request.form['mensaje']
 
+        html_body = render_template("email_template.html", nombre=nombre, correo=correo, asunto=asunto, mensaje=mensaje)
+
+        msg = Message(subject=asunto,
+                      sender=("Chacharitas", correo),
+                      recipients=['axolotlscriptjs@gmail.com'],
+                      body=f"Nombre: {nombre}\nCorreo: {correo}\n\nMensaje:\n{mensaje}",
+                      html=html_body)
+
+        try:
+            mail.send(msg)
+            flash('Correo enviado exitosamente.', 'success')
+        except Exception as e:
+            flash(f'Error al enviar el correo: {str(e)}', 'danger')
+
+        return redirect(url_for('contact'))
+
+    return render_template('contact.html')
 
 @app.route("/shop-single")
 def shop_single():

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correo de Contacto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nuevo Mensaje de Contacto</h1>
+        </div>
+        <div class="content">
+            <p><strong>Nombre:</strong> {{ nombre }}</p>
+            <p><strong>Correo:</strong> {{ correo }}</p>
+            <p><strong>Asunto:</strong> {{ asunto }}</p>
+            <p><strong>Mensaje:</strong></p>
+            <p>{{ mensaje }}</p>
+        </div>
+        <div class="footer">
+            <p>Este correo fue enviado desde el formulario de contacto de tu sitio web.</p>
+        </div>
+    </div>
+</body>
+</html>

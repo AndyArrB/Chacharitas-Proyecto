@@ -1,9 +1,7 @@
 {% extends "security/base.html" %}
-{% from "security/_macros.html" import render_field_with_errors, render_field, render_form_errors, render_field_errors %}
-
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
 
 {% block styles %}
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 
@@ -15,8 +13,6 @@
           href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
-
-
 {% endblock %}
 
 {% block body %}
@@ -24,7 +20,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-5 order-md-2">
-                    <img src="{{ url_for('static', filename= 'images/undraw_file_sync_ot38.svg') }}" alt="Image"
+                    <img src="{{ url_for('static', filename='images/undraw_file_sync_ot38.svg') }}" alt="Image"
                          class="img-fluid">
                 </div>
                 <div class="col-md-7 contents">
@@ -32,10 +28,11 @@
                         <div class="col-md-12">
                             <div class="form-block">
                                 <div class="mb-4">
-                                    <h3>Regístrate en <strong>Chacharitas</strong></h3>
-                                    <p class="mb-4">Empieza con tu vida sustentable.</p>
+                                    <h3>{{ _fsdomain('Registrate en') }} <strong>Chacharitas</strong></h3>
+                                    <p class="mb-4">{{ _fsdomain('Empieza tu vida sustentable') }}</p>
                                 </div>
-                                <form action="{{ url_for_security('register') }}" method="POST">
+
+                                <form id="register_form" action="{{ url_for_security('register') }}" method="POST">
                                     {{ register_user_form.hidden_tag() }}
                                     <div class="form-group first mb-5">
                                         <div class="row">
@@ -61,7 +58,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-pill text-white btn-block btn-primary" type="submit">
-                                        Registrarse
+                                        {{ _fsdomain('Registrarse') }}
                                     </button>
                                 </form>
                             </div>
@@ -71,8 +68,30 @@
             </div>
         </div>
     </div>
+    {% block scripts %}
+        <script>
+            document.getElementById('register_form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                var registerForm = this;
 
-{% endblock %}
-
-{% block scripts %}
+                // Submit the registration form
+                fetch(registerForm.action, {
+                    method: 'POST',
+                    body: new FormData(registerForm)
+                }).then(function (response) {
+                    if (response.ok) {
+                        // Redirect to /confirm
+                        window.location.href = '/confirm';
+                    } else {
+                        // Handle registration form errors
+                        response.text().then(function (text) {
+                            console.error('Registration failed:', text);
+                        });
+                    }
+                }).catch(function (error) {
+                    console.error('Error:', error);
+                });
+            });
+        </script>
+    {% endblock %}
 {% endblock %}

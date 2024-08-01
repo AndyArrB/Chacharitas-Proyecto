@@ -14,11 +14,9 @@ a.navbar-brand.custome-text-color.logo.h1.align-self-center {
     background-color: rgb(190, 255, 175);
 }
 
-.custome-text-color 
-{
+.custome-text-color {
     color: white;
 }
-
 
 
 /* Asegúrate de que el dropdown no se salga de la pantalla */
@@ -64,6 +62,27 @@ a.navbar-brand.custome-text-color.logo.h1.align-self-center {
 .custom-radio input[type="radio"] {
     margin-right: 10px;
 }
+
 .custom-radio label {
     cursor: pointer;
+}
+
+.dropdown-divider {
+    height: 1px;
+    margin: 0.3rem 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.18); /* Black color */
+}
+
+.profile-picture {
+    width: 8rem; /* Adjust the size as needed */
+    height: 8rem; /* Adjust the size as needed */
+    border-radius: 50%; /* Make the image circular */
+}
+
+.center-li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
