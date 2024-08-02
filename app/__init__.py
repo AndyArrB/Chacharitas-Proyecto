@@ -47,7 +47,7 @@ with app.app_context():
         root = user_datastore.find_user(username="root")
 
         if not root:
-            root = user_datastore.create_user(username="root", password="root", us_phone_number="+524421941945", email="root@gmail.com")
+            root = user_datastore.create_user(username="root", password="root", us_phone_number="+524421941945", email="ayrtonsepch@gmail.com")
             db.session.commit()
 
         user_datastore.add_role_to_user(root, admin_role)

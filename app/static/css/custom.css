@@ -78,6 +78,12 @@ a.navbar-brand.custome-text-color.logo.h1.align-self-center {
     width: 8rem; /* Adjust the size as needed */
     height: 8rem; /* Adjust the size as needed */
     border-radius: 50%; /* Make the image circular */
+    background-color: #e7e7e7;
+}
+
+.profile-picture-mini{
+    border-radius: 50%; /* Make the image circular */
+    background-color: #e7e7e7;
 }
 
 .center-li {

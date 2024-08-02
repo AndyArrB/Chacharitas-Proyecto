@@ -29,24 +29,39 @@ Table of contents
 
 
 /* Typography */
-body, ul, li, p, a, label, input, div {
+body, ul, li, p, label, input, div, a {
   font-family: 'Roboto', sans-serif;
   font-size: 18px !important;
   font-weight: 300 !important;
 }
+
+.about-title {
+  font-family: "Patrick Hand", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size:48px;
+}
+
+.orden-title {
+  font-family: "Patrick Hand", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size:30px;
+}
+
 .h1 {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Patrick Hand', serif;
   font-size: 48px !important;
-  font-weight: 200 !important;
+  font-weight: 700 !important;
 }
 .h2 {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Patrick Hand', sans-serif;
   font-size: 30px !important;
-  font-weight: 300;
+  font-weight: 400;
 }
 .h3 {
   font-family: 'Roboto', sans-serif;
-  font-size: 22px !important;
+  font-size: 20px !important;
 }
 /* General */
 .logo { font-weight: 500 !important;}

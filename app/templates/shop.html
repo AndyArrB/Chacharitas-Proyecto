@@ -33,10 +33,11 @@
                         </a>
                         <ul id="collapseTwo" class="collapse list-unstyled pl-3">
                             {% for index, category in categories %}
-                            <li class="custom-radio">
-                                <input type="checkbox" name="category" id="category-{{ index }}" value="{{ index }}">
-                                <label for="category-{{ index }}">{{ category }}</label>
-                            </li>
+                                <li class="custom-radio">
+                                    <input type="checkbox" name="category" id="category-{{ index }}"
+                                           value="{{ index }}">
+                                    <label for="category-{{ index }}">{{ category }}</label>
+                                </li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -70,16 +71,16 @@
 
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <ul class="list-inline shop-top-menu pb-3 pt-1">
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none mr-3" href="#">Orden</a>
+                            <li class="list-inline-item mr-2">
+                                <h2 class="text-dark mr-3 orden-title">Orden</h2>
                             </li>
                         </ul>
                     </div>
                     <div class="col-md-6 pb-4">
                         <div class="d-flex">
-                            <select name="order" class="form-control" >
+                            <select name="order" class="form-control">
                                 <option value="1">Todo</option>
                                 <option value="2">A - Z</option>
                                 <option value="3"> Menor a mayor precio</option>
@@ -89,49 +90,39 @@
                 </div>
                 <div class="row">
                     {% for product in products %}
-                    <div class="col-md-4">
-                        <div class="card mb-4 product-wap rounded-0">
-                            <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid"
-                                     src="{{ url_for('static', filename='assets/img/shop_01.jpg') }}">
-                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                    <ul class="list-unstyled">
-                                        <li><a class="btn btn-success text-white" href="{{ url_for('shop_single') }}"><i
-                                                class="far fa-heart"></i></a></li>
-                                        <li><a class="btn btn-success text-white mt-2"
-                                               href="{{ url_for('shop_single') }}"><i
-                                                class="far fa-eye"></i></a></li>
-                                        <li><a class="btn btn-success text-white mt-2"
-                                               href="{{ url_for('shop_single') }}"><i
-                                                class="fas fa-cart-plus"></i></a></li>
-                                    </ul>
+                        <div class="col-md-4">
+                            <div class="card mb-4 product-wap rounded-0">
+                                <div class="card rounded-0">
+                                    <img class="card-img rounded-0 img-fluid"
+                                         src="{{ url_for('static', filename='assets/img/shop_01.jpg') }}">
+                                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                        <ul class="list-unstyled">
+                                            <li><a class="btn btn-success text-white mt-2"
+                                                   href="{{ url_for('shop_single') }}"><i
+                                                    class="far fa-eye"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <a href="{{ url_for('shop_single') }}"
+                                       class="h3 text-decoration-none text-center">{{ product.nombre_producto }}</a>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
+                                            <img class="img-fluid profile-picture-mini"
+                                                 src="{{ url_for('static', filename='images/unknown.png') }}"
+                                                 alt="User Image">
+                                            <small>* User *</small>
+                                        </div>
+                                        <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
+                                            <a href="{{ url_for('shop_single') }}"
+                                               class="h3 text-decoration-none">Municipio</a>
+                                            <a><small>* Colonia *</small></a>
+                                        </div>
+                                    </div>
+                                    <p class="text-center mb-0 mt-2">${{ product.precio }}</p>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <a href="{{ url_for('shop_single') }}" class="h3 text-decoration-none">{{ product.nombre_producto }}</a>
-                                <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                    <li>M/L/X/XL</li>
-                                    <li class="pt-2">
-                                        <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
-                                    </li>
-                                </ul>
-                                <ul class="list-unstyled d-flex justify-content-center mb-1">
-                                    <li>
-                                        <i class="text-warning fa fa-star"></i>
-                                        <i class="text-warning fa fa-star"></i>
-                                        <i class="text-warning fa fa-star"></i>
-                                        <i class="text-muted fa fa-star"></i>
-                                        <i class="text-muted fa fa-star"></i>
-                                    </li>
-                                </ul>
-                                <p class="text-center mb-0">${{ product.precio }}</p>
-                            </div>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
                 <div div="row">
@@ -294,7 +285,7 @@
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/templatemo.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-    <script src="{{ url_for('static', filename='scripts/shop_filtering.js')}}"></script>
+    <script src="{{ url_for('static', filename='scripts/shop_filtering.js') }}"></script>
 
 
     <!-- End Script -->
