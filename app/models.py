@@ -1,4 +1,6 @@
 from datetime import date
+
+from flask_security.models import fsqla_v3
 from sqlalchemy.orm import Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
 
