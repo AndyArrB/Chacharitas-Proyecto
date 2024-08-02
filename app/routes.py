@@ -1,11 +1,8 @@
-from datetime import datetime
-
 from flask import render_template, request, jsonify, flash, redirect, url_for
-from flask_login import login_required, current_user
 from flask_mail import Message
 from flask_security import roles_required, send_mail, hash_password
 
-from app import app, ExtendedRegisterForm, User, user_datastore
+from app import app
 from app import mail
 from app.database import Database
 from app.forms.modal_form import generate_dynamic_form
