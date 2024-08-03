@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let response = await axios.get(`/filter-products?${queryParams}`);
         let filtered_products = response.data;
+        console.log(filtered_products)
 
         update_product_list(filtered_products);
     }
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <a><small>${product.colonia}</small></a>
                             </div>
                         </div>
-                        <p class="text-center mb-0 mt-2">${product.precio}</p>
+                        <p class="text-center mb-0 mt-2">$${product.precio}</p>
                     </div>
                 </div>
             `;

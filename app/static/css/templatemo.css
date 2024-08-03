@@ -54,11 +54,13 @@ body, ul, li, p, label, input, div, a {
   font-size: 48px !important;
   font-weight: 700 !important;
 }
+
 .h2 {
   font-family: 'Patrick Hand', sans-serif;
   font-size: 30px !important;
   font-weight: 400;
 }
+
 .h3 {
   font-family: 'Roboto', sans-serif;
   font-size: 20px !important;

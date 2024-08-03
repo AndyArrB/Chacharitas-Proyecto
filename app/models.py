@@ -26,14 +26,6 @@ class Calle(db.Model):
     colonia_id: Mapped[int] = mapped_column(db.ForeignKey('colonias.id'), nullable=False)
     colonia = db.relationship('Colonia', backref=db.backref('calles', cascade='all, delete-orphan'))
 
-class Direccion(db.Model):
-    __tablename__ = 'direcciones'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    num_int: Mapped[str] = mapped_column()
-    num_ext: Mapped[str] = mapped_column()
-    calle_id: Mapped[int] = mapped_column(db.ForeignKey('calles.id'), nullable=False)
-    calle = db.relationship('Calle', backref=db.backref('direcciones', cascade='all, delete-orphan'))
-
 class Marca(db.Model):
     __tablename__ = 'marcas'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -88,12 +80,14 @@ class Producto(db.Model):
     id_marca: Mapped[int] = mapped_column(db.ForeignKey('marcas.id'), nullable=False)
     id_material: Mapped[int] = mapped_column(db.ForeignKey('materiales.id'), nullable=False)
     id_genero: Mapped[int] = mapped_column(db.ForeignKey('generos.id'), nullable=False)
+    id_usuario: Mapped[int] = mapped_column(db.ForeignKey('usuarios.id'), nullable=False)  # New foreign key reference
     color = db.relationship('Color', backref=db.backref('productos', cascade='all, delete-orphan'))
     categoria = db.relationship('Categoria', backref=db.backref('productos', cascade='all, delete-orphan'))
     detalle_tamaño = db.relationship('DetalleTamaño', backref=db.backref('productos', cascade='all, delete-orphan'))
     marca = db.relationship('Marca', backref=db.backref('productos', cascade='all, delete-orphan'))
     material = db.relationship('Material', backref=db.backref('productos', cascade='all, delete-orphan'))
     genero = db.relationship('Genero', backref=db.backref('productos', cascade='all, delete-orphan'))
+    usuario = db.relationship('User', backref=db.backref('productos', cascade='all, delete-orphan'))  # New relationship
 
 class TipoSuscripcion(db.Model):
     __tablename__ = 'tipo_suscripciones'

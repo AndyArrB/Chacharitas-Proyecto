@@ -25,13 +25,13 @@ fsqla.FsModels.set_db_info(db, "usuarios", "roles")
 class User(db.Model, fsqla_v3.FsUserMixin):
     __tablename__ = 'usuarios'
     id: Mapped[int] = mapped_column(primary_key=True)
-    nombre: Mapped[str] = mapped_column(nullable=False)
-    apellido_paterno: Mapped[str] = mapped_column(nullable=False)
-    apellido_materno: Mapped[str] = mapped_column(nullable=False)
     id_genero: Mapped[int] = mapped_column(db.ForeignKey('generos.id'), nullable=False)
-    id_direccion: Mapped[int] = mapped_column(db.ForeignKey('direcciones.id'), nullable=False)
+    id_calle: Mapped[int] = mapped_column(db.ForeignKey('calles.id'), nullable=False)
+    num_int: Mapped[str] = mapped_column(nullable=True)
+    num_ext: Mapped[str] = mapped_column(nullable=False)
     genero = db.relationship('Genero', backref=db.backref('usuarios', cascade='all, delete-orphan'))
-    direccion = db.relationship('Direccion', backref=db.backref('usuarios', cascade='all, delete-orphan'))
+    calle = db.relationship('Calle', backref=db.backref('usuarios', cascade='all, delete-orphan'))
+
 
 class Role(db.Model, fsqla_v3.FsRoleMixin):
     __tablename__ = "roles"
@@ -45,6 +45,8 @@ with app.app_context():
     try:
         # Insert initial data if not already present
         for model, records in data.items():
+            if model.__name__ == 'Producto':
+                continue
             if not db.session.query(model).count():
                 print("Evaluando a ", model)
                 db.session.execute(insert(model), records)
@@ -60,14 +62,21 @@ with app.app_context():
                 password="root",
                 us_phone_number="+524421941945",
                 email="ayrtonsepch@gmail.com",
-                nombre="Root",
-                apellido_paterno="Admin",
-                apellido_materno="User",
                 id_genero=1,  # Assuming 1 is a valid id in the 'generos' table
-                id_direccion=1  # Assuming 1 is a valid id in the 'direcciones' table
+                id_calle=1,
+                num_int=None,
+                num_ext="111"
             )
             user_datastore.add_role_to_user(root, admin_role)
             db.session.commit()
+
+        for model, records in data.items():
+            if model.__name__ != 'Producto':
+                continue
+            if not db.session.query(model).count():
+                print("Evaluando a ", model)
+                db.session.execute(insert(model), records)
+        db.session.commit()
 
     except SQLAlchemyError as e:
         print(f"Error al insertar datos: {e}")

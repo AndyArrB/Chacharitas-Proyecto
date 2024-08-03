@@ -11,8 +11,16 @@
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
     <link rel="shortcut icon" type="image/x-icon"
           href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+
 {% endblock %}
 
 {% block body %}
@@ -27,11 +35,17 @@
                     <div class="row justify-content-center">
                         <div class="col-md-12">
                             <div class="form-block">
-                                <div class="mb-4">
-                                    <h3>{{ _fsdomain('Registrate en') }} <strong>Chacharitas</strong></h3>
-                                    <p class="mb-4">{{ _fsdomain('Empieza tu vida sustentable') }}</p>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <h3>{{ _fsdomain('Registrate en') }} <strong>Chacharitas</strong></h3>
+                                        <p class="mb-4">{{ _fsdomain('Empieza tu vida sustentable') }}</p>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <a href="{{ url_for('index') }}" class="btn text-white btn-danger">
+                                            <i class="bi bi-arrow-return-left icon-spe"></i>
+                                        </a>
+                                    </div>
                                 </div>
-
                                 <form id="register_form" action="{{ url_for_security('register') }}" method="POST">
                                     {{ register_user_form.hidden_tag() }}
                                     <div class="form-group first mb-5">
@@ -45,15 +59,53 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-5">
-                                        {{ render_field_with_errors(register_user_form.us_phone_number, class="form-control", id="us_phone_number") }}
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {{ render_field_with_errors(register_user_form.us_phone_number, class="form-control", id="us_phone_number") }}
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{ render_field_with_errors(register_user_form.id_genero, class="form-control", id="genero") }}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group mb-5">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 {{ render_field_with_errors(register_user_form.password, class="form-control", id="password") }}
                                             </div>
                                             <div class="col-md-6">
                                                 {{ render_field_with_errors(register_user_form.password_confirm, class="form-control", id="password_confirm") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mb-4">{{ _fsdomain('¿Dónde radicas?') }}</p>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {{ render_field_with_errors(register_user_form.municipio, class="form-control") }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ render_field_with_errors(register_user_form.colonia, class="form-control") }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ render_field_with_errors(register_user_form.id_calle, class="form-control") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(register_user_form.num_ext, class="form-control", id="numero_exterior") }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(register_user_form.num_int, class="form-control", id="numero_interior") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-12">
+
                                             </div>
                                         </div>
                                     </div>
@@ -70,27 +122,73 @@
     </div>
     {% block scripts %}
         <script>
-            document.getElementById('register_form').addEventListener('submit', function (event) {
+            document.getElementById('register_form').addEventListener('submit', async function (event) {
                 event.preventDefault();
                 var registerForm = this;
 
-                // Submit the registration form
-                fetch(registerForm.action, {
-                    method: 'POST',
-                    body: new FormData(registerForm)
-                }).then(function (response) {
+                try {
+                    let response = await fetch(registerForm.action, {
+                        method: 'POST',
+                        body: new FormData(registerForm)
+                    });
+
                     if (response.ok) {
                         // Redirect to /confirm
                         window.location.href = '/confirm';
                     } else {
                         // Handle registration form errors
-                        response.text().then(function (text) {
-                            console.error('Registration failed:', text);
-                        });
+                        let text = await response.text();
+                        console.error('Registration failed:', text);
                     }
-                }).catch(function (error) {
+                } catch (error) {
                     console.error('Error:', error);
-                });
+                }
+            });
+
+            let select_municipio = document.querySelector("select[name='municipio']");
+            let select_colonia = document.querySelector("select[name='colonia']");
+            let select_calle = document.querySelector("select[name='id_calle']");
+
+            select_municipio.addEventListener('change', async function () {
+                var municipioId = this.value;
+                console.log(municipioId);
+
+                try {
+                    let response = await fetch('/get_colonias/' + municipioId);
+                    let data = await response.json();
+
+                    select_colonia.innerHTML = '';
+                    data.forEach(function (colonia) {
+                        let option = document.createElement('option');
+                        option.value = colonia[0];
+                        option.text = colonia[1];
+                        select_colonia.add(option);
+                    });
+                    select_colonia.dispatchEvent(new Event('change'));
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+
+            select_colonia.addEventListener('change', async function () {
+                var coloniaId = this.value;
+                console.log(coloniaId);
+
+                try {
+                    let response = await fetch('/get_calles/' + coloniaId);
+                    let data = await response.json();
+
+                    select_calle.innerHTML = '';
+                    data.forEach(function (calle) {
+                        let option = document.createElement('option');
+                        option.value = calle[0];
+                        option.text = calle[1];
+                        select_calle.add(option);
+                    });
+                    console.log(select_calle.value);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
             });
         </script>
     {% endblock %}

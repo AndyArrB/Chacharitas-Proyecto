@@ -7,7 +7,7 @@ a.navbar-brand.custome-text-color.logo.h1.align-self-center {
 }
 
 .custome-bg-navbar {
-    background-color: rgb(255, 175, 255);
+    background-color: rgb(121, 182, 166);
 }
 
 .custome-bg-navbar-about {
@@ -91,4 +91,18 @@ a.navbar-brand.custome-text-color.logo.h1.align-self-center {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.small-option-font {
+    font-size:12px; !important;
+}
+
+strong, h1, h3 {
+  font-family: 'Patrick Hand', serif;
+  font-size: 40px !important;
+  font-weight: 700 !important;
+}
+
+.icon-spe {
+    font-size: 30px;
 }

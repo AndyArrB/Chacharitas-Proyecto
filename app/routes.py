@@ -2,19 +2,18 @@ from flask import render_template, request, jsonify, flash, redirect, url_for
 from flask_mail import Message
 from flask_security import roles_required, send_mail, hash_password
 
-from app import app
+from app import app, User
 from app import mail
 from app.database import Database
 from app.forms.modal_form import generate_dynamic_form
+from app.models import Colonia, Calle, Municipio, Categoria, Producto, Genero
 
 # * Instancia para el contacto con nuestra base de datos
 db = Database()
 
-# * Para llenar las opciones en el <navbar> lateral
-tables = db.select_tables()
-
-
-# * APP ------------------------------------------------------------------------------
+# * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * -
+# * APP ----------------------------------------------------------------------------*
+# * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * -
 
 # ? Establece las rutas que le dan vida al frontend y al ruteo
 # ? de todo este
@@ -33,9 +32,21 @@ def about():
 
 @app.route("/shop")
 def shop():
-    products = db.select_all(table=db["productos"])
-    genders = db.select_all(table=db["generos"])
-    categories = db.select_all(table=db["categorias"])
+    category_filter = request.args.get('category')
+    category= Categoria.query.filter_by(tipo_categoria=category_filter).first()
+
+    products = Producto.query.join(User, Producto.id_usuario == User.id) \
+        .join(Calle, User.id_calle == Calle.id) \
+        .join(Colonia, Calle.colonia_id == Colonia.id) \
+        .join(Municipio, Colonia.municipio_id == Municipio.id).all()
+
+
+    genders = Genero.query.all()
+    categories = Categoria.query.all()
+
+    if category:
+        products = [product for product in products if product.id_categoria == category.id]
+
     return render_template("shop.html", products=products, genders=genders, categories=categories)
 
 
@@ -100,14 +111,30 @@ def filter_products():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/get_colonias/<int:municipio_id>', methods=['GET'])
+def get_colonias(municipio_id):
+    colonias = Colonia.query.filter_by(municipio_id=municipio_id).order_by(Colonia.nombre_colonia).all()
+    colonias_list = [(colonia.id, colonia.nombre_colonia) for colonia in colonias]
+    return jsonify(colonias_list)
 
-# * CRUD -----------------------------------------------------------------------------
+@app.route('/get_calles/<int:colonia_id>', methods=['GET'])
+def get_calles(colonia_id):
+    calles = Calle.query.filter_by(colonia_id=colonia_id).order_by(Calle.nombre_calle).all()
+    calles_list = [(calle.id, calle.nombre_calle) for calle in calles]
+    return jsonify(calles_list)
 
+
+# * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * -
+# * CRUD ----------------------------------------------------------------------------*
+# * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * -
 # ? Establece las rutas de nuestro servidor. Todas las peticiones de la página se
 # ? redirigen aquí
 
 # ? Rutas principales. Estas son las que responden ante las solicitudes HTTP
 # ? del cliente.
+
+# * Para llenar las opciones en el <navbar> lateral
+tables = db.select_tables()
 
 @app.route("/index/<table>", methods=["GET", "POST"])
 @roles_required("admin")
@@ -156,7 +183,6 @@ def delete(table, id):
 
     # ? Rutas que devuelven información relevante en JSON.
     # ? Su uso radica solo para la renderización de la tabla.
-
 
 @app.route("/data/<table>/body", methods=["GET"])
 @roles_required("admin")

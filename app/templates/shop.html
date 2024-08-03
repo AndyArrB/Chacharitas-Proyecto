@@ -17,10 +17,10 @@
                             <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                         </a>
                         <ul class="collapse show list-unstyled pl-3">
-                            {% for index, gender in genders %}
+                            {% for gender in genders %}
                                 <li class="custom-radio">
-                                    <input type="checkbox" name="gender" id="gender-{{ index }}" value="{{ index }}">
-                                    <label for="gender-{{ index }}">{{ gender }}</label>
+                                    <input type="checkbox" name="gender" id="gender-{{ gender.id }}" value="{{ gender.id }}">
+                                    <label for="gender-{{ gender.id }}">{{ gender.nombre_genero }}</label>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -32,11 +32,11 @@
                             <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
                         </a>
                         <ul id="collapseTwo" class="collapse list-unstyled pl-3">
-                            {% for index, category in categories %}
+                            {% for category in categories %}
                                 <li class="custom-radio">
-                                    <input type="checkbox" name="category" id="category-{{ index }}"
-                                           value="{{ index }}">
-                                    <label for="category-{{ index }}">{{ category }}</label>
+                                    <input type="checkbox" name="category" id="category-{{ category.id }}"
+                                           value="{{ category.id }}">
+                                    <label for="category-{{ category.id }}">{{ category.tipo_categoria }}</label>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -111,12 +111,12 @@
                                             <img class="img-fluid profile-picture-mini"
                                                  src="{{ url_for('static', filename='images/unknown.png') }}"
                                                  alt="User Image">
-                                            <small>* User *</small>
+                                            <small>{{ product.usuario.username }}</small>
                                         </div>
                                         <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
                                             <a href="{{ url_for('shop_single') }}"
-                                               class="h3 text-decoration-none">Municipio</a>
-                                            <a><small>* Colonia *</small></a>
+                                               class="h3 text-decoration-none">{{ product.usuario.calle.colonia.municipio.nombre_municipio }}</a>
+                                            <a><small>{{ product.usuario.calle.colonia.nombre_colonia }}</small></a>
                                         </div>
                                     </div>
                                     <p class="text-center mb-0 mt-2">${{ product.precio }}</p>
