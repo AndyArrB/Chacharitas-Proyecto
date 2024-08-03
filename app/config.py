@@ -11,7 +11,7 @@ REMEMBER_COOKIE_SAMESITE = "strict"
 SESSION_COOKIE_SAMESITE = "strict"
 
 # * Flask-SQLAlchemy: La conexión con la cual se inicializa la base de datos
-SQLALCHEMY_DATABASE_URI = "mssql+pyodbc://@localhost/c41?trusted_connection=yes&driver=ODBC+Driver+18+for+SQL+Server&Encrypt=no"
+SQLALCHEMY_DATABASE_URI = "mssql+pyodbc://@localhost/c46?trusted_connection=yes&driver=ODBC+Driver+18+for+SQL+Server&Encrypt=no"
 
 # * Flask-Security: Permite asignar roles a usuarios
 SECURITY_USERNAME_ENABLE = True
