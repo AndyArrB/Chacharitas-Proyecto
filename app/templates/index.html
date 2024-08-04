@@ -96,22 +96,25 @@
         </div>
         <div class="row">
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{{ url_for('static', filename='assets/img/playera_harry_01.webp') }}"
-                                 class="rounded-circle img-fluid border"></a>
-                <h5 class="text-center mt-3 mb-3">Playeras</h5>
-                <p class="text-center"><a class="btn btn-success">Ver más</a></p>
+                <a href="/shop?category=ropa"><img
+                        src="{{ url_for('static', filename='images/cat_ropa.jpg') }}"
+                        class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3">Ropa</h5>
+                <p class="text-center"><a class="btn btn-success" href="/shop?category=ropa">Ver más</a></p>
             </div>
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{{ url_for('static', filename='assets/img/pantalones_03.jpeg') }}"
-                                 class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Pantalones</h2>
-                <p class="text-center"><a class="btn btn-success">Ver más</a></p>
+                <a href="/shop?category=cuidado_personal"><img
+                        src="{{ url_for('static', filename='images/cat_calzado.jpg') }}"
+                        class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Calzado</h2>
+                <p class="text-center"><a class="btn btn-success" href="/shop?category=calzado">Ver más</a></p>
             </div>
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{{ url_for('static', filename='assets/img/sudadera_02.jpg') }}"
-                                 class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Sudaderas</h2>
-                <p class="text-center"><a class="btn btn-success">Ver más</a></p>
+                <a href="/shop?category=juguetes"><img
+                        src="{{ url_for('static', filename='images/cat_toys.jpg') }}"
+                        class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Juguetes</h2>
+                <p class="text-center"><a class="btn btn-success" href="/shop?category=juguetes">Ver más</a></p>
             </div>
         </div>
     </section>

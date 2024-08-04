@@ -2,8 +2,9 @@
 # ? de datos establecida por Flask-SQLAlchemy
 
 from sqlalchemy import select, insert, delete, update, Table, Column
-from app import app
+from app import app, User
 from app import db
+from app.models import Calle, Colonia, Municipio
 
 
 class Database:
@@ -115,14 +116,32 @@ class Database:
         print("----Pre orderby-----", sort_by)
         if sort_by == 2:
             print("Hey")
-            stmt = select(products_table).where(and_(*filters)).order_by(products_table.c.nombre_producto)
+            stmt = select(products_table) \
+                .join(User, products_table.c.id_usuario == User.id) \
+                .join(Calle, User.id_calle == Calle.id) \
+                .join(Colonia, Calle.colonia_id == Colonia.id) \
+                .join(Municipio, Colonia.municipio_id == Municipio.id) \
+                .where(and_(*filters)) \
+                .order_by(products_table.c.nombre_producto)
         elif sort_by == 3:
-            stmt = select(products_table).where(and_(*filters)).order_by(products_table.c.precio)
+            stmt = select(products_table) \
+                .join(User, products_table.c.id_usuario == User.id) \
+                .join(Calle, User.id_calle == Calle.id) \
+                .join(Colonia, Calle.colonia_id == Colonia.id) \
+                .join(Municipio, Colonia.municipio_id == Municipio.id) \
+                .where(and_(*filters)) \
+                .order_by(products_table.c.precio)
         else:
-            stmt = select(products_table).where(and_(*filters))
+            stmt = select(products_table) \
+                .join(User, products_table.c.id_usuario == User.id) \
+                .join(Calle, User.id_calle == Calle.id) \
+                .join(Colonia, Calle.colonia_id == Colonia.id) \
+                .join(Municipio, Colonia.municipio_id == Municipio.id) \
+                .where(and_(*filters))
 
         print(f"Constructed query: {str(stmt)}")
 
         result = self.database.session.execute(stmt)
         products = [dict(row._mapping) for row in result]
+        print(products)
         return products

@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let response = await axios.get(`/filter-products?${queryParams}`);
         let filtered_products = response.data;
-        console.log(filtered_products)
 
         update_product_list(filtered_products);
     }
@@ -35,32 +34,39 @@ document.addEventListener("DOMContentLoaded", () => {
         products.forEach(product => {
             const productElement = document.createElement("div");
             productElement.classList.add("col-md-4");
+
+            const productData = product.Producto;
+            const userData = product.User;
+            const calleData = product.Calle;
+            const coloniaData = product.Colonia;
+            const municipioData = product.Municipio;
+
             productElement.innerHTML = `
-                <div class="card mb-4 product-wap rounded-0">
-                    <div class="card rounded-0">
-                        <img class="card-img rounded-0 img-fluid" src="${product.image_url}">
-                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                            <ul class="list-unstyled">
-                                <li><a class="btn btn-success text-white mt-2" href="/shop-single/${product.id}"><i class="far fa-eye"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-body text-center">
-                        <a href="/shop-single/${product.id}" class="h3 text-decoration-none text-center">${product.nombre_producto}</a>
-                        <div class="row mt-2">
-                            <div class="col-md-4">
-                                <img class="img-fluid profile-picture-mini" src="${product.user_image_url}" alt="User Image">
-                                <small>${product.user_name}</small>
-                            </div>
-                            <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
-                                <a href="/shop-single/${product.id}" class="h3 text-decoration-none">${product.municipio}</a>
-                                <a><small>${product.colonia}</small></a>
-                            </div>
-                        </div>
-                        <p class="text-center mb-0 mt-2">$${product.precio}</p>
+            <div class="card mb-4 product-wap rounded-0">
+                <div class="card rounded-0">
+                    <img class="card-img rounded-0 img-fluid" src="${productData.image_url}">
+                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul class="list-unstyled">
+                            <li><a class="btn btn-success text-white mt-2" href="/shop-single/${productData.id}"><i class="far fa-eye"></i></a></li>
+                        </ul>
                     </div>
                 </div>
-            `;
+                <div class="card-body text-center">
+                    <a href="/shop-single/${productData.id}" class="h3 text-decoration-none text-center">${productData.nombre_producto}</a>
+                    <div class="row mt-2">
+                        <div class="col-md-4">
+                            <img class="img-fluid profile-picture-mini" src="static/images/user-${userData.id}.jpg" alt="User Image" style="width: 100px; height: 50px;">
+                            <small>${userData.username}</small>
+                        </div>
+                        <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
+                            <a href="/shop-single/${productData.id}" class="h3 text-decoration-none">${municipioData.nombre_municipio}</a>
+                            <a><small>${coloniaData.nombre_colonia}</small></a>
+                        </div>
+                    </div>
+                    <p class="text-center mb-0 mt-2">$${productData.precio}</p>
+                </div>
+            </div>
+        `;
             productContainer.appendChild(productElement);
         });
     }

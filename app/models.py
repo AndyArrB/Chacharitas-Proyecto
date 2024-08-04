@@ -68,6 +68,7 @@ class DetalleTamaño(db.Model):
     tamaño: Mapped[str] = mapped_column(nullable=False)
     tipo_tamaño = db.relationship('TipoTamaño', backref=db.backref('detalle_tamaños', cascade='all, delete-orphan'))
 
+
 class Producto(db.Model):
     __tablename__ = 'productos'
     id: Mapped[int] = mapped_column(primary_key=True)

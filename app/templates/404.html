@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="container text-center mt-5 mb-5 row align-items-center">
+        <div class="col-8">
+            <img class="w-75" src="{{ url_for('static', filename='images/404.png') }}" alt="Error 404 Image">
+        </div>
+        <div class="col-4">
+            <h3>Lo sentimos, la página que buscas no existe.</h3>
+            <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-left"></i> Volver a Inicio
+            </a>
+        </div>
+    </div>
+{% endblock %}

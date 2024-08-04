@@ -19,7 +19,8 @@
                         <ul class="collapse show list-unstyled pl-3">
                             {% for gender in genders %}
                                 <li class="custom-radio">
-                                    <input type="checkbox" name="gender" id="gender-{{ gender.id }}" value="{{ gender.id }}">
+                                    <input type="checkbox" name="gender" id="gender-{{ gender.id }}"
+                                           value="{{ gender.id }}">
                                     <label for="gender-{{ gender.id }}">{{ gender.nombre_genero }}</label>
                                 </li>
                             {% endfor %}
@@ -105,12 +106,13 @@
                                 </div>
                                 <div class="card-body text-center">
                                     <a href="{{ url_for('shop_single') }}"
-                                       class="h3 text-decoration-none text-center">{{ product.nombre_producto }}</a>
+                                       class="h4 text-decoration-none text-center">{{ product.nombre_producto }}</a>
                                     <div class="row mt-2">
                                         <div class="col-md-4">
                                             <img class="img-fluid profile-picture-mini"
-                                                 src="{{ url_for('static', filename='images/unknown.png') }}"
-                                                 alt="User Image">
+                                                 src="{{ url_for('static', filename='images/user-{}.jpg'.format(product.usuario.id)) }}"
+                                                 alt="User Image"
+                                                 style="width: 100px; height: 50px;">
                                             <small>{{ product.usuario.username }}</small>
                                         </div>
                                         <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
@@ -124,20 +126,6 @@
                             </div>
                         </div>
                     {% endfor %}
-                </div>
-                <div div="row">
-                    <ul class="pagination pagination-lg justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#"
-                               tabindex="-1">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
-                        </li>
-                    </ul>
                 </div>
             </div>
 
@@ -159,108 +147,6 @@
                 </div>
                 <div class="col-lg-9 m-auto tempaltemo-carousel">
                     <div class="row d-flex flex-row">
-                        <!--Controls-->
-                        <div class="col-1 align-self-center">
-                            <a class="h1" href="#multi-item-example" role="button" data-bs-slide="prev">
-                                <i class="text-light fas fa-chevron-left"></i>
-                            </a>
-                        </div>
-                        <!--End Controls-->
-
-                        <!--Carousel Wrapper-->
-                        <div class="col">
-                            <div class="carousel slide carousel-multi-item pt-2 pt-md-0" id="multi-item-example"
-                                 data-bs-ride="carousel">
-                                <!--Slides-->
-                                <div class="carousel-inner product-links-wap" role="listbox">
-
-                                    <!--First slide-->
-                                    <div class="carousel-item active">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_01.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_02.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_03.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_04.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End First slide-->
-
-                                    <!--Second slide-->
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_01.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_02.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_03.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_04.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End Second slide-->
-
-                                    <!--Third slide-->
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_01.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_02.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_03.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img"
-                                                                 src="{{ url_for('static', filename='assets/img/brand_04.png') }}"
-                                                                 alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End Third slide-->
-
-                                </div>
-                                <!--End Slides-->
-                            </div>
-                        </div>
-                        <!--End Carousel Wrapper-->
-
                         <!--Controls-->
                         <div class="col-1 align-self-center">
                             <a class="h1" href="#multi-item-example" role="button" data-bs-slide="next">
