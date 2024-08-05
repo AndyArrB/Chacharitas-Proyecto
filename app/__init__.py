@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_security.models import fsqla_v3, fsqla
@@ -11,9 +13,18 @@ from app.config import *
 from app.models import db
 from app.registries import data
 from sqlalchemy.exc import SQLAlchemyError
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+DB_NAME = getenv("DB_NAME")
+DB_USERNAME = getenv("DB_USER")
+DB_PASSWORD = getenv("DB_PASSWORD")
 
 app = Flask(__name__)
 app.config.from_object("app.config")
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mssql+pyodbc://{DB_USERNAME}:{DB_PASSWORD}!@localhost/{DB_NAME}?trusted_connection=yes&driver=ODBC+Driver+18+for+SQL+Server&Encrypt=no"
+
 
 db.init_app(app)
 bootstrap = Bootstrap5(app)

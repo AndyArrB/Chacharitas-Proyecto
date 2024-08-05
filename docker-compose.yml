@@ -1,16 +1,13 @@
-version: "3.3"
-
 services:
   mssql:
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
       - "1433:1433"
     environment:
       ACCEPT_EULA: Y
-      SA_PASSWORD: Onelookdarkroom!
-      DB_PASSWORD: Onelookdarkroom!
-      DB_NAME: Chacharitas_final
-      DB_USERNAME: Phantasos
+      SA_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - .env
 
   app:
     build: .
@@ -18,6 +15,11 @@ services:
       - mssql
     environment:
       DB_HOST: mssql
-      DB_NAME: Chacharias_final
-      DB_USERNAME: Phantasos
-      DB_PASSWORD: Onelookdarkroom!
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: flask run
