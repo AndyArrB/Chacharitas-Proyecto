@@ -4,7 +4,7 @@
 {% block styles %}
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- Style -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
@@ -121,6 +121,7 @@
         </div>
     </div>
     {% block scripts %}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.getElementById('register_form').addEventListener('submit', async function (event) {
                 event.preventDefault();
@@ -133,10 +134,17 @@
                     });
 
                     if (response.ok) {
-                        // Redirect to /confirm
-                        window.location.href = '/confirm';
+                        Swal.fire({
+                            title: '¡Formulario enviado!',
+                            text: 'Gracias por registrarte. Te responderemos pronto.',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/confirm';
+                            }
+                        });
                     } else {
-                        // Handle registration form errors
                         let text = await response.text();
                         console.error('Registration failed:', text);
                     }

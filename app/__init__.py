@@ -1,4 +1,3 @@
-import urllib
 
 from flask import Flask
 from flask_bootstrap import Bootstrap5
@@ -45,8 +44,8 @@ class User(db.Model, fsqla_v3.FsUserMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     id_genero: Mapped[int] = mapped_column(db.ForeignKey('generos.id'), nullable=False)
     id_calle: Mapped[int] = mapped_column(db.ForeignKey('calles.id'), nullable=False)
-    num_int: Mapped[str] = mapped_column(db.String(50), nullable=True)  # Specify length for VARCHAR
-    num_ext: Mapped[str] = mapped_column(db.String(50), nullable=False)  # Specify length for VARCHAR
+    num_int: Mapped[int] = mapped_column(nullable=True)
+    num_ext: Mapped[int] = mapped_column(nullable=False)
     genero = db.relationship('Genero', backref=db.backref('usuarios', cascade='all, delete-orphan'))
     calle = db.relationship('Calle', backref=db.backref('usuarios', cascade='all, delete-orphan'))
 
@@ -83,28 +82,28 @@ with app.app_context():
                 id_genero=1,  # Assuming 1 is a valid id in the 'generos' table
                 id_calle=1,
                 num_int=None,
-                num_ext="111"
+                num_ext=111
             )
             user_datastore.add_role_to_user(root, admin_role)
             db.session.commit()
 
         additional_users = [
             {"username": "juan", "password": "password1", "us_phone_number": "+524421941946",
-             "email": "juan@example.com", "id_genero": 1, "id_calle": 1, "num_int": 2, "num_ext": "112"},
+             "email": "juan@example.com", "id_genero": 1, "id_calle": 1, "num_int": 2, "num_ext": 112},
             {"username": "paola", "password": "password2", "us_phone_number": "+524421941947",
-             "email": "paola@example.com", "id_genero": 2, "id_calle": 30, "num_int": None, "num_ext": "321"},
+             "email": "paola@example.com", "id_genero": 2, "id_calle": 30, "num_int": None, "num_ext": 321},
             {"username": "carlos", "password": "password3", "us_phone_number": "+524421941948",
-             "email": "carlos@example.com", "id_genero": 1, "id_calle": 11, "num_int": 32, "num_ext": "110"},
+             "email": "carlos@example.com", "id_genero": 1, "id_calle": 11, "num_int": 32, "num_ext": 110},
             {"username": "maria", "password": "password4", "us_phone_number": "+524421941949",
-             "email": "maria@example.com", "id_genero": 2, "id_calle": 16, "num_int": None, "num_ext": "642"},
+             "email": "maria@example.com", "id_genero": 2, "id_calle": 16, "num_int": None, "num_ext": 642},
             {"username": "luis", "password": "password5", "us_phone_number": "+524421941950",
-             "email": "luis@example.com", "id_genero": 1, "id_calle": 26, "num_int": 1, "num_ext": "143"},
+             "email": "luis@example.com", "id_genero": 1, "id_calle": 26, "num_int": 1, "num_ext": 143},
             {"username": "ana", "password": "password6", "us_phone_number": "+524421941951",
-             "email": "ana@example.com", "id_genero": 1, "id_calle": 28, "num_int": 1, "num_ext": "16"},
+             "email": "ana@example.com", "id_genero": 1, "id_calle": 28, "num_int": 1, "num_ext": 16},
             {"username": "pedro", "password": "password7", "us_phone_number": "+524421941952",
-             "email": "pedro@example.com", "id_genero": 1, "id_calle": 29, "num_int": None, "num_ext": "246"},
+             "email": "pedro@example.com", "id_genero": 1, "id_calle": 29, "num_int": None, "num_ext": 246},
             {"username": "sofia", "password": "password8", "us_phone_number": "+524421941953",
-             "email": "sofia@example.com", "id_genero": 1, "id_calle": 27, "num_int": 14, "num_ext": "2346"}
+             "email": "sofia@example.com", "id_genero": 1, "id_calle": 27, "num_int": 14, "num_ext": 2346}
         ]
 
         for user_data in additional_users:

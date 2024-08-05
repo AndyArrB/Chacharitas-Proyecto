@@ -1,6 +1,7 @@
 from flask_security import RegisterForm
 from flask_security.forms import EqualTo
 from wtforms import StringField, SelectField, HiddenField
+from wtforms.fields.numeric import IntegerField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, ValidationError
 import phonenumbers
@@ -10,8 +11,8 @@ from app.models import Calle, Colonia, Municipio, Genero
 
 class ExtendedRegisterForm(RegisterForm):
     us_phone_number = StringField(_("Numero telefónico"), [DataRequired()])
-    num_int = StringField('Número Interior', validators=[])
-    num_ext = StringField('Número Exterior', validators=[DataRequired()])
+    num_int = IntegerField('Número Interior', validators=[])
+    num_ext = IntegerField('Número Exterior', validators=[DataRequired()])
     id_calle = SelectField('Calle', choices=[], validators=[DataRequired()])
     colonia = SelectField('Colonia', choices=[], validators=[DataRequired()])
     municipio = SelectField('Municipio', choices=[], validators=[DataRequired()])
@@ -34,3 +35,5 @@ class ExtendedRegisterForm(RegisterForm):
             input_number = phonenumbers.parse("+52" + field.data)
             if not (phonenumbers.is_valid_number(input_number)):
                 raise ValidationError(_('Número inválido'))
+
+
