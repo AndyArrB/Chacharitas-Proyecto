@@ -1,25 +1,19 @@
 services:
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+  web:
+    build:
+      context: .
+    command: ["./wait-for-it.sh", "db:3306", "--timeout=30", "--", "flask", "run", "--host=0.0.0.0"]
+    volumes:
+      - .:/app
     ports:
-      - "1433:1433"
-    environment:
-      ACCEPT_EULA: Y
-      SA_PASSWORD: ${DB_PASSWORD}
+      - 5000:5000
+    depends_on:
+      - db
+    restart: on-failure
     env_file:
       - .env
 
-  app:
-    build: .
-    depends_on:
-      - mssql
-    environment:
-      DB_HOST: mssql
-      DB_NAME: ${DB_NAME}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
+  db:
+    image: mysql:8.4.0
     env_file:
       - .env
-    volumes:
-      - .:/app
-    command: flask run

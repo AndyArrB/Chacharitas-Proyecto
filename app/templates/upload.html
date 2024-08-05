@@ -1,0 +1,114 @@
+{% extends "security/base.html" %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+
+{% block styles %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+    <link rel="shortcut icon" type="image/x-icon"
+          href="{{ url_for('static', filename='assets/img/logoChacharitas.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5 order-md-2">
+                    <img src="{{ url_for('static', filename='images/undraw_file_sync_ot38.svg') }}" alt="Image"
+                         class="img-fluid">
+                </div>
+                <div class="col-md-7 contents">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="form-block">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <h3>{{ _fsdomain('Agregar Producto') }} <strong>Chacharitas</strong></h3>
+                                        <p class="mb-4">{{ _fsdomain('Llena la información del producto') }}</p>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <a href="{{ url_for('index') }}" class="btn text-white btn-danger">
+                                            <i class="bi bi-arrow-return-left icon-spe"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <form id="producto_form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+                                    {{ producto_form.hidden_tag() }}
+                                    <div class="form-group first mb-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.nombre_producto, class="form-control", id="nombre_producto") }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.cantidad, class="form-control", id="cantidad") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.precio, class="form-control", id="precio") }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.id_color, class="form-control", id="color") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.id_categoria, class="form-control", id="categoria") }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.id_detalle_tamaños, class="form-control", id="detalle_tamaños") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.id_marca, class="form-control", id="marca") }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.id_material, class="form-control", id="material") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field_with_errors(producto_form.id_genero, class="form-control", id="genero") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {{ render_field_with_errors(producto_form.imagen, class="form-control", id="imagen") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-pill text-white btn-block btn-primary" type="submit">
+                                        {{ _fsdomain('Guardar Producto') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block scripts %}
+    {% endblock %}
+{% endblock %}

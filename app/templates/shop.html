@@ -95,7 +95,8 @@
                             <div class="card mb-4 product-wap rounded-0">
                                 <div class="card rounded-0">
                                     <img class="card-img rounded-0 img-fluid"
-                                         src="{{ url_for('static', filename='assets/img/shop_01.jpg') }}">
+                                         style="width: 500px; height: 300px;"
+                                         src="{{ url_for('static', filename='images/p-{}.jpg'.format(product.id)) }}">
                                     <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                         <ul class="list-unstyled">
                                             <li><a class="btn btn-success text-white mt-2"

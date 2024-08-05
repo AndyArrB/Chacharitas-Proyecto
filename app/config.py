@@ -9,6 +9,7 @@ SECURITY_PASSWORD_SALT = "146585145368132386173505678016728509634"
 # * quien la creó inicia la solicitud
 REMEMBER_COOKIE_SAMESITE = "strict"
 SESSION_COOKIE_SAMESITE = "strict"
+UPLOAD_FOLDER = 'app/static/images'
 
 # * Flask-Security: Permite asignar roles a usuarios
 SECURITY_USERNAME_ENABLE = True

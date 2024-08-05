@@ -1,12 +1,17 @@
+import os
+
 from flask import render_template, request, jsonify, flash, redirect, url_for
+from flask_login import current_user
 from flask_mail import Message
 from flask_security import roles_required, send_mail, hash_password
 from sqlalchemy import and_, or_
+from werkzeug.utils import secure_filename
 
 from app import app, User
 from app import mail
 from app.database import Database
 from app.forms.modal_form import generate_dynamic_form
+from app.forms.product_form import ProductoForm
 from app.models import Colonia, Calle, Municipio, Categoria, Producto, Genero
 
 # * Instancia para el contacto con nuestra base de datos
@@ -85,6 +90,42 @@ def shop_single():
     return render_template("shop-single.html")
 
     # ? Rutas complejas. Se encargan del filtrado del front.
+
+
+@app.route("/upload", methods=["GET", "POST"])
+def upload():
+    form = ProductoForm()
+    if form.validate_on_submit():
+        # Create a new Producto instance
+        new_producto = Producto(
+            nombre_producto=form.nombre_producto.data,
+            cantidad=form.cantidad.data,
+            precio=form.precio.data,
+            id_color=form.id_color.data,
+            id_categoria=form.id_categoria.data,
+            id_detalle_tamaños=form.id_detalle_tamaños.data,
+            id_marca=form.id_marca.data,
+            id_material=form.id_material.data,
+            id_genero=form.id_genero.data,
+            id_usuario=current_user.id  # Set the current user's ID
+        )
+
+        # Add to the database to get the product ID
+        db.database.session.add(new_producto)
+        db.database.session.commit()
+
+        # Handle file upload
+        file = form.imagen.data
+        filename = secure_filename(file.filename)
+        new_filename = f"p-{new_producto.id}.{filename.rsplit('.', 1)[1].lower()}"
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
+
+        # Update the product record with the new image filename
+        new_producto.imagen = new_filename
+        db.database.session.commit()
+        return redirect(url_for('shop'))
+
+    return render_template('upload.html', producto_form=form)
 
 
 @app.route("/filter-products")

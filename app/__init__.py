@@ -1,4 +1,4 @@
-import os
+import urllib
 
 from flask import Flask
 from flask_bootstrap import Bootstrap5
@@ -17,13 +17,20 @@ from os import getenv
 from dotenv import load_dotenv
 
 load_dotenv()
-DB_NAME = getenv("DB_NAME")
-DB_USERNAME = getenv("DB_USER")
-DB_PASSWORD = getenv("DB_PASSWORD")
+MYSQL_ROOT_PASSWORD = getenv("MYSQL_ROOT_PASSWORD")
+MYSQL_DATABASE = getenv("MYSQL_DATABASE")
+MYSQL_HOST = getenv("MYSQL_HOST") or "localhost"
+MYSQL_USERNAME = getenv("MYSQL_USERNAME") or "root"
 
 app = Flask(__name__)
 app.config.from_object("app.config")
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mssql+pyodbc://{DB_USERNAME}:{DB_PASSWORD}!@localhost/{DB_NAME}?trusted_connection=yes&driver=ODBC+Driver+18+for+SQL+Server&Encrypt=no"
+
+if getenv("DOCKER") == "on":
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PASSWORD}@db/{MYSQL_DATABASE}'
+else:
+    #* Configuramos la conexión de la app hacia la base de datos
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
+
 
 
 db.init_app(app)
@@ -38,8 +45,8 @@ class User(db.Model, fsqla_v3.FsUserMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     id_genero: Mapped[int] = mapped_column(db.ForeignKey('generos.id'), nullable=False)
     id_calle: Mapped[int] = mapped_column(db.ForeignKey('calles.id'), nullable=False)
-    num_int: Mapped[str] = mapped_column(nullable=True)
-    num_ext: Mapped[str] = mapped_column(nullable=False)
+    num_int: Mapped[str] = mapped_column(db.String(50), nullable=True)  # Specify length for VARCHAR
+    num_ext: Mapped[str] = mapped_column(db.String(50), nullable=False)  # Specify length for VARCHAR
     genero = db.relationship('Genero', backref=db.backref('usuarios', cascade='all, delete-orphan'))
     calle = db.relationship('Calle', backref=db.backref('usuarios', cascade='all, delete-orphan'))
 
