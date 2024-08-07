@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_security.models import fsqla_v3, fsqla
@@ -27,10 +26,9 @@ app.config.from_object("app.config")
 if getenv("DOCKER") == "on":
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PASSWORD}@db/{MYSQL_DATABASE}'
 else:
-    #* Configuramos la conexión de la app hacia la base de datos
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
-
-
+    # * Configuramos la conexión de la app hacia la base de datos
+    app.config[
+        'SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
 
 db.init_app(app)
 bootstrap = Bootstrap5(app)
@@ -38,6 +36,7 @@ babel = Babel(app)
 mail = Mail(app)
 
 fsqla.FsModels.set_db_info(db, "usuarios", "roles")
+
 
 class User(db.Model, fsqla_v3.FsUserMixin):
     __tablename__ = 'usuarios'
@@ -53,6 +52,7 @@ class User(db.Model, fsqla_v3.FsUserMixin):
 class Role(db.Model, fsqla_v3.FsRoleMixin):
     __tablename__ = "roles"
     id: Mapped[int] = mapped_column(primary_key=True)
+
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -86,7 +86,25 @@ with app.app_context():
             )
             user_datastore.add_role_to_user(root, admin_role)
             db.session.commit()
+            print("Usuario root creado con exito!")
 
+        root_andy = user_datastore.find_user(username="andy")
+
+        if not root_andy:
+            root_andy = user_datastore.create_user(
+                username="andy",
+                password="andy",
+                us_phone_number="+524421941943",
+                email="arredondo.bal2020@gmail.com",
+                id_genero=2,
+                id_calle=12,
+                num_int=None,
+                num_ext=111
+            )
+            print("Usuario Andy creado con exito!")
+
+        user_datastore.add_role_to_user(root, admin_role)
+        db.session.commit()
         additional_users = [
             {"username": "juan", "password": "password1", "us_phone_number": "+524421941946",
              "email": "juan@example.com", "id_genero": 1, "id_calle": 1, "num_int": 2, "num_ext": 112},

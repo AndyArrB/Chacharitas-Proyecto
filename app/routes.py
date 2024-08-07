@@ -12,7 +12,8 @@ from app import mail
 from app.database import Database
 from app.forms.modal_form import generate_dynamic_form
 from app.forms.product_form import ProductoForm
-from app.models import Colonia, Calle, Municipio, Categoria, Producto, Genero
+from app.models import Colonia, Calle, Municipio, Categoria, Producto, Genero, TipoTamaño, TipoSuscripcion, Estatus, \
+    FormaPago, Pedido, Color, DetalleTamaño, Marca, Material
 
 # * Instancia para el contacto con nuestra base de datos
 db = Database()
@@ -165,15 +166,17 @@ def filter_products():
             gender_filters = [Producto.id_genero == gen for gen in genders]
             filters.append(or_(*gender_filters))
 
-        products = db.database.session.query(Producto, User, Calle, Colonia, Municipio) \
+        query = db.database.session.query(Producto, User, Calle, Colonia, Municipio) \
             .join(User, Producto.id_usuario == User.id) \
             .join(Calle, User.id_calle == Calle.id) \
             .join(Colonia, Calle.colonia_id == Colonia.id) \
             .join(Municipio, Colonia.municipio_id == Municipio.id) \
             .filter(and_(*filters)) \
-            .order_by(Producto.precio) \
-            .all()
 
+        if sort_by != 1:
+            query = query.order_by(Producto.nombre_producto if sort_by == 2 else Producto.precio)
+
+        products = query.all()
         products_dict = []
         for product_tuple in products:
             product_dict = {}
@@ -271,10 +274,48 @@ def delete(table, id):
 
 
 @app.route("/data/<table>/body", methods=["GET"])
-@roles_required("admin")
+# @roles_required("admin")
 def body(table):
     table_body = db.select_all(table=db[table])
     table_body = [row._asdict() for row in table_body]
+
+    # Define a mapping of table names to their corresponding field updates
+    table_updates = {
+        'colonias': {'municipio_id': lambda id: Municipio.query.get(id).nombre_municipio},
+        'calles': {'colonia_id': lambda id: Colonia.query.get(id).nombre_colonia},
+        'detalle_tamaños': {'id_tipo_tamaño': lambda id: TipoTamaño.query.get(id).tipo_tamaño},
+        'suscripciones': {
+            'id_cliente': lambda id: User.query.get(id).username,
+            'id_tipo_suscripcion': lambda id: TipoSuscripcion.query.get(id).nombre_suscripcion
+        },
+        'pedidos': {
+            'id_cliente': lambda id: User.query.get(id).username,
+            'id_estatus': lambda id: Estatus.query.get(id).nombre,
+            'id_forma_pago': lambda id: FormaPago.query.get(id).nombre_forma
+        },
+        'detalles_pedidos': {
+            'id_producto': lambda id: Producto.query.get(id).nombre_producto,
+            'id_pedido': lambda id: Pedido.query.get(id).fecha
+        },
+        'productos' : {
+            'id_color': lambda id: Color.query.get(id).nombre_color,
+            'id_categoria': lambda id: Categoria.query.get(id).tipo_categoria,
+            'id_detalle_tamaños': lambda id: DetalleTamaño.query.get(id).tamaño,
+            'id_marca': lambda id: Marca.query.get(id).nombre_marca,
+            'id_material': lambda id: Material.query.get(id).nombre_material,
+            'id_genero': lambda id: Genero.query.get(id).nombre_genero,
+            'id_usuario': lambda id: User.query.get(id).username,
+        }
+    }
+
+    # Apply the updates based on the table name
+    for registry in table_body:
+        if table in table_updates:
+            for field, update_func in table_updates[table].items():
+                registry[field] = update_func(registry[field])
+
+    print(table_body)
+
     return table_body
 
 
