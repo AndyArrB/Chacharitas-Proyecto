@@ -98,7 +98,7 @@ class Suscripcion(db.Model):
     __tablename__ = 'suscripciones'
     id: Mapped[int] = mapped_column(primary_key=True)
     fecha_inicio: Mapped[date] = mapped_column(nullable=False)
-    fecha_renovacion: Mapped[date] = mapped_column(nullable=False)
+    fecha_renovacion: Mapped[date] = mapped_column(nullable=True)
     id_cliente: Mapped[int] = mapped_column(db.ForeignKey('usuarios.id'), nullable=False)
     id_tipo_suscripcion: Mapped[int] = mapped_column(db.ForeignKey('tipo_suscripciones.id'), nullable=False)
     cliente = db.relationship('User', backref=db.backref('suscripciones', cascade='all, delete-orphan'))

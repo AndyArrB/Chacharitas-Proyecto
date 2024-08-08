@@ -4,7 +4,7 @@ from flask_security.models import fsqla_v3, fsqla
 from flask_security import SQLAlchemyUserDatastore, Security
 from flask_mail import Mail
 from flask_babel import Babel
-from sqlalchemy import insert
+from sqlalchemy import insert, text
 from sqlalchemy.orm import mapped_column, Mapped
 from app.forms.register import ExtendedRegisterForm
 from app.config import *
@@ -60,6 +60,44 @@ with app.app_context():
     db.create_all()
 
     try:
+
+        trigger_sql = """
+            CREATE TRIGGER after_user_insert
+            AFTER INSERT ON usuarios
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO suscripciones (fecha_inicio, fecha_renovacion, id_cliente, id_tipo_suscripcion)
+                VALUES (CURRENT_DATE, NULL, NEW.id, 1);
+            END;
+        """
+
+        trigger_sql_2 = """
+        CREATE TRIGGER limit_user_products
+        BEFORE INSERT ON productos
+        FOR EACH ROW
+        BEGIN
+            DECLARE product_count INT;
+        
+            -- Contar el número de productos que tiene el usuario
+            SELECT COUNT(*)
+            INTO product_count
+            FROM productos
+            WHERE id_usuario = NEW.id_usuario;
+        
+            -- Si el usuario tiene una suscripción con ID 1 y ya tiene 3 productos, impide la inserción
+            IF (SELECT id_tipo_suscripcion FROM suscripciones WHERE id_cliente = NEW.id_usuario) = 1 AND product_count >= 3 THEN
+                SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'El usuario con suscripción ID 1 no puede tener más de 3 productos.';
+            END IF;
+        END;
+        """
+
+        with db.engine.connect() as connection:
+            connection.execute(text(trigger_sql))
+            connection.execute(text(trigger_sql_2))
+        print("Trigger after_user_insert creado con éxito.")
+
+
         # Insert initial data if not already present
         for model, records in data.items():
             if model.__name__ == 'Producto':
@@ -103,7 +141,7 @@ with app.app_context():
             )
             print("Usuario Andy creado con exito!")
 
-        user_datastore.add_role_to_user(root, admin_role)
+        user_datastore.add_role_to_user(root_andy, admin_role)
         db.session.commit()
         additional_users = [
             {"username": "juan", "password": "password1", "us_phone_number": "+524421941946",
