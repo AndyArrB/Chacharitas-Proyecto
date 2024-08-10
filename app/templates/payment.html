@@ -1,0 +1,78 @@
+{% extends "security/base.html" %}
+{% from "security/_macros.html" import render_field_with_errors %}
+
+{% block styles %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7 contents">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="form-block">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <h3>Realizar Pago</h3>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <a href="{{ url_for('index') }}" class="btn text-white btn-danger">
+                                            <i class="bi bi-arrow-return-left icon-spe"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <form method="POST" action="{{ url_for('payment') }}">
+                                    {{ form.hidden_tag() }}
+                                    <div class="form-group first mb-5">
+                                        <div class="col-md-12">
+                                            {{ render_field_with_errors(form.card_number, class="form-control", id="card_number") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="col-md-12">
+                                            {{ render_field_with_errors(form.card_holder, class="form-control", id="card_holder") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="col-md-6">
+                                            {{ render_field_with_errors(form.expiration_month, class="form-control", id="expiration_month") }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ render_field_with_errors(form.expiration_year, class="form-control", id="expiration_year") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="col-md-12">
+                                            {{ render_field_with_errors(form.cvv, class="form-control", id="cvv") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <div class="col-md-12">
+                                            {{ render_field_with_errors(form.amount, class="form-control", id="amount") }}
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-pill text-white btn-block btn-primary" type="submit">
+                                        Realizar compra
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 order-md-2">
+                    <img src="{{ url_for('static', filename='images/payment.png') }}" alt="Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

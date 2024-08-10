@@ -100,13 +100,13 @@
                                     <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                         <ul class="list-unstyled">
                                             <li><a class="btn btn-success text-white mt-2"
-                                                   href="{{ url_for('shop_single') }}"><i
+                                                   href="{{ url_for('shop_single', id=product.id) }}"><i
                                                     class="far fa-eye"></i></a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="card-body text-center">
-                                    <a href="{{ url_for('shop_single') }}"
+                                    <a href="{{ url_for('shop_single', id=product.id) }}"
                                        class="h4 text-decoration-none text-center">{{ product.nombre_producto }}</a>
                                     <div class="row mt-2">
                                         <div class="col-md-4">
@@ -117,7 +117,7 @@
                                             <small>{{ product.usuario.username }}</small>
                                         </div>
                                         <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
-                                            <a href="{{ url_for('shop_single') }}"
+                                            <a href="{{ url_for('shop_single', id=product.id) }}"
                                                class="h3 text-decoration-none">{{ product.usuario.calle.colonia.municipio.nombre_municipio }}</a>
                                             <a><small>{{ product.usuario.calle.colonia.nombre_colonia }}</small></a>
                                         </div>

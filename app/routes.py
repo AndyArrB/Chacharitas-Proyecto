@@ -12,6 +12,7 @@ from app import mail
 from app.database import Database
 from app.forms.modal_form import generate_dynamic_form
 from app.forms.product_form import ProductoForm
+from app.forms.buy_form import PaymentForm
 from app.models import Colonia, Calle, Municipio, Categoria, Producto, Genero, TipoTamaño, TipoSuscripcion, Estatus, \
     FormaPago, Pedido, Color, DetalleTamaño, Marca, Material
 
@@ -86,9 +87,36 @@ def contact():
     return render_template('contact.html')
 
 
-@app.route("/shop-single")
-def shop_single():
-    return render_template("shop-single.html")
+@app.route("/shop-single/<int:id>")
+def shop_single(id):
+
+    product = Producto.query \
+        .join(User, Producto.id_usuario == User.id) \
+        .join(Calle, User.id_calle == Calle.id) \
+        .join(Colonia, Calle.colonia_id == Colonia.id) \
+        .join(Municipio, Colonia.municipio_id == Municipio.id) \
+        .join(Color, Producto.id_color == Color.id) \
+        .join(DetalleTamaño, Producto.id_detalle_tamaños == DetalleTamaño.id) \
+        .filter(Producto.id == id) \
+        .first()
+
+    return render_template("shop-single.html", product=product)
+
+@app.route("/payment/<int:id>")
+def buy(id):
+
+    form = PaymentForm()
+    product = Producto.query \
+        .join(User, Producto.id_usuario == User.id) \
+        .join(Calle, User.id_calle == Calle.id) \
+        .join(Colonia, Calle.colonia_id == Colonia.id) \
+        .join(Municipio, Colonia.municipio_id == Municipio.id) \
+        .join(Color, Producto.id_color == Color.id) \
+        .join(DetalleTamaño, Producto.id_detalle_tamaños == DetalleTamaño.id) \
+        .filter(Producto.id == id) \
+        .first()
+
+    render_template("payment.html", comprar_form=form, product=product)
 
     # ? Rutas complejas. Se encargan del filtrado del front.
 
