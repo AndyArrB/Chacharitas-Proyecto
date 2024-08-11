@@ -14,60 +14,49 @@
     <div class="content">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-7 contents">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12">
-                            <div class="form-block">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <h3>Realizar Pago</h3>
-                                    </div>
-                                    <div class="col-md-2 text-right">
-                                        <a href="{{ url_for('index') }}" class="btn text-white btn-danger">
-                                            <i class="bi bi-arrow-return-left icon-spe"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <form method="POST" action="{{ url_for('payment') }}">
-                                    {{ form.hidden_tag() }}
-                                    <div class="form-group first mb-5">
-                                        <div class="col-md-12">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Realizar Pago</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form method="POST" action="{{ url_for('payment', id=id) }}">
+                                        {{ form.hidden_tag() }}
+                                        <div class="form-group mb-3">
                                             {{ render_field_with_errors(form.card_number, class="form-control", id="card_number") }}
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-5">
-                                        <div class="col-md-12">
+                                        <div class="form-group mb-3">
                                             {{ render_field_with_errors(form.card_holder, class="form-control", id="card_holder") }}
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-5">
-                                        <div class="col-md-6">
-                                            {{ render_field_with_errors(form.expiration_month, class="form-control", id="expiration_month") }}
+                                        <div class="form-row mb-3">
+                                            <div class="col">
+                                                {{ render_field_with_errors(form.expiration_month, class="form-control", id="expiration_month") }}
+                                            </div>
+                                            <div class="col">
+                                                {{ render_field_with_errors(form.expiration_year, class="form-control", id="expiration_year") }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            {{ render_field_with_errors(form.expiration_year, class="form-control", id="expiration_year") }}
-                                        </div>
-                                    </div>
-                                    <div class="form-group mb-5">
-                                        <div class="col-md-12">
+                                        <div class="form-group mb-3">
                                             {{ render_field_with_errors(form.cvv, class="form-control", id="cvv") }}
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-5">
-                                        <div class="col-md-12">
+                                        <div class="form-group mb-3">
                                             {{ render_field_with_errors(form.amount, class="form-control", id="amount") }}
                                         </div>
-                                    </div>
-                                    <button class="btn btn-pill text-white btn-block btn-primary" type="submit">
-                                        Realizar compra
-                                    </button>
-                                </form>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary btn-block" type="submit">
+                                                Realizar compra
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <img src="{{ url_for('static', filename='images/p-{}.jpg'.format(id)) }}" alt="Image" class="img-fluid">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-5 order-md-2">
-                    <img src="{{ url_for('static', filename='images/payment.png') }}" alt="Image" class="img-fluid">
                 </div>
             </div>
         </div>

@@ -14,6 +14,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from os import getenv
 from dotenv import load_dotenv
 
+from app.triggers import create_triggers_if_not_exist
+
 load_dotenv()
 MYSQL_ROOT_PASSWORD = getenv("MYSQL_ROOT_PASSWORD")
 MYSQL_DATABASE = getenv("MYSQL_DATABASE")
@@ -60,43 +62,7 @@ with app.app_context():
     db.create_all()
 
     try:
-
-        trigger_sql = """
-            CREATE TRIGGER after_user_insert
-            AFTER INSERT ON usuarios
-            FOR EACH ROW
-            BEGIN
-                INSERT INTO suscripciones (fecha_inicio, fecha_renovacion, id_cliente, id_tipo_suscripcion)
-                VALUES (CURRENT_DATE, NULL, NEW.id, 1);
-            END;
-        """
-
-        trigger_sql_2 = """
-        CREATE TRIGGER limit_user_products
-        BEFORE INSERT ON productos
-        FOR EACH ROW
-        BEGIN
-            DECLARE product_count INT;
-        
-            -- Contar el número de productos que tiene el usuario
-            SELECT COUNT(*)
-            INTO product_count
-            FROM productos
-            WHERE id_usuario = NEW.id_usuario;
-        
-            -- Si el usuario tiene una suscripción con ID 1 y ya tiene 3 productos, impide la inserción
-            IF (SELECT id_tipo_suscripcion FROM suscripciones WHERE id_cliente = NEW.id_usuario) = 1 AND product_count >= 3 THEN
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'El usuario con suscripción ID 1 no puede tener más de 3 productos.';
-            END IF;
-        END;
-        """
-
-        with db.engine.connect() as connection:
-            connection.execute(text(trigger_sql))
-            connection.execute(text(trigger_sql_2))
-        print("Trigger after_user_insert creado con éxito.")
-
+        create_triggers_if_not_exist()
 
         # Insert initial data if not already present
         for model, records in data.items():
@@ -117,7 +83,7 @@ with app.app_context():
                 password="root",
                 us_phone_number="+524421941945",
                 email="ayrtonsepch@gmail.com",
-                id_genero=1,  # Assuming 1 is a valid id in the 'generos' table
+                id_genero=1,
                 id_calle=1,
                 num_int=None,
                 num_ext=111

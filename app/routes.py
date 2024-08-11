@@ -1,7 +1,8 @@
+import datetime
 import os
 
 from flask import render_template, request, jsonify, flash, redirect, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 from flask_mail import Message
 from flask_security import roles_required, send_mail, hash_password
 from sqlalchemy import and_, or_
@@ -14,7 +15,7 @@ from app.forms.modal_form import generate_dynamic_form
 from app.forms.product_form import ProductoForm
 from app.forms.buy_form import PaymentForm
 from app.models import Colonia, Calle, Municipio, Categoria, Producto, Genero, TipoTamaño, TipoSuscripcion, Estatus, \
-    FormaPago, Pedido, Color, DetalleTamaño, Marca, Material
+    FormaPago, Pedido, Color, DetalleTamaño, Marca, Material, DetallePedido
 
 # * Instancia para el contacto con nuestra base de datos
 db = Database()
@@ -89,7 +90,6 @@ def contact():
 
 @app.route("/shop-single/<int:id>")
 def shop_single(id):
-
     product = Producto.query \
         .join(User, Producto.id_usuario == User.id) \
         .join(Calle, User.id_calle == Calle.id) \
@@ -102,10 +102,24 @@ def shop_single(id):
 
     return render_template("shop-single.html", product=product)
 
-@app.route("/payment/<int:id>")
-def buy(id):
 
-    form = PaymentForm()
+@app.route("/payment/<int:id>", methods=["GET", "POST"])
+@login_required
+def payment(id):
+    form = PaymentForm(id_producto=id)
+
+    if request.method == 'POST' and form.validate_on_submit():
+        pedido = Pedido(id_cliente=current_user.id, fecha=datetime.datetime.now(), id_estatus=1, id_forma_pago=1)
+        db.database.session.add(pedido)
+        db.database.session.commit()
+
+        # Create a new DetallePedido instance associated with the newly created Pedido
+        detalle_pedido = DetallePedido(cantidad=request.form['amount'], id_producto=id, id_pedido=pedido.id)
+        db.database.session.add(detalle_pedido)
+        db.database.session.commit()
+
+        redirect(url_for('shop'))
+
     product = Producto.query \
         .join(User, Producto.id_usuario == User.id) \
         .join(Calle, User.id_calle == Calle.id) \
@@ -116,12 +130,14 @@ def buy(id):
         .filter(Producto.id == id) \
         .first()
 
-    render_template("payment.html", comprar_form=form, product=product)
+    return render_template("payment.html", product=product, form=form, id=id)
 
     # ? Rutas complejas. Se encargan del filtrado del front.
 
 
+
 @app.route("/upload", methods=["GET", "POST"])
+@login_required
 def upload():
     form = ProductoForm()
     if form.validate_on_submit():
@@ -199,7 +215,7 @@ def filter_products():
             .join(Calle, User.id_calle == Calle.id) \
             .join(Colonia, Calle.colonia_id == Colonia.id) \
             .join(Municipio, Colonia.municipio_id == Municipio.id) \
-            .filter(and_(*filters)) \
+            .filter(and_(*filters))
 
         if sort_by != 1:
             query = query.order_by(Producto.nombre_producto if sort_by == 2 else Producto.precio)
@@ -325,7 +341,7 @@ def body(table):
             'id_producto': lambda id: Producto.query.get(id).nombre_producto,
             'id_pedido': lambda id: Pedido.query.get(id).fecha
         },
-        'productos' : {
+        'productos': {
             'id_color': lambda id: Color.query.get(id).nombre_color,
             'id_categoria': lambda id: Categoria.query.get(id).tipo_categoria,
             'id_detalle_tamaños': lambda id: DetalleTamaño.query.get(id).tamaño,

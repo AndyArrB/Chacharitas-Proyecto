@@ -14,7 +14,9 @@
             <div class="row">
                 <div class="col-lg-5 mt-5">
                     <div class="card mb-3">
-                        <img class="card-img img-fluid" src="{{ url_for('static', filename='images/p-{}.jpg'.format(product.id)) }}" alt="Card image cap" id="product-detail">
+                        <img class="card-img img-fluid"
+                             src="{{ url_for('static', filename='images/p-{}.jpg'.format(product.id)) }}"
+                             alt="Card image cap" id="product-detail">
                     </div>
                 </div>
                 <!-- col end -->
@@ -47,16 +49,24 @@
                                     <h6>{{ product.detalle_tamaño.tamaño }}</h6>
                                 </li>
                             </ul>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <h6>Cantidad: </h6>
+                                </li>
+                                <li class="list-inline-item">
+                                    <h6>{{ product.cantidad }}</h6>
+                                </li>
+                            </ul>
 
 
-                            <form action="" method="GET">
-                                <input type="hidden" name="product-title" value="Activewear">
-                                <div class="row pb-3">
-                                    <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Comprar ahora</button>
-                                    </div>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <a href="{{ url_for('payment', id=1) }}" class="btn btn-success btn-lg">
+                                        Comprar ahora
+                                    </a>
                                 </div>
-                            </form>
+                            </div>
+
 
                         </div>
                     </div>
@@ -89,12 +99,12 @@
             slidesToScroll: 3,
             dots: true,
             responsive: [{
-                    breakpoint: 1024,
-                    settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 3
-                    }
-                },
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3
+                }
+            },
                 {
                     breakpoint: 600,
                     settings: {

@@ -91,41 +91,43 @@
                 </div>
                 <div id="product-container" class="row">
                     {% for product in products %}
-                        <div class="col-md-4">
-                            <div class="card mb-4 product-wap rounded-0">
-                                <div class="card rounded-0">
-                                    <img class="card-img rounded-0 img-fluid"
-                                         style="width: 500px; height: 300px;"
-                                         src="{{ url_for('static', filename='images/p-{}.jpg'.format(product.id)) }}">
-                                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                        <ul class="list-unstyled">
-                                            <li><a class="btn btn-success text-white mt-2"
-                                                   href="{{ url_for('shop_single', id=product.id) }}"><i
-                                                    class="far fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="card-body text-center">
-                                    <a href="{{ url_for('shop_single', id=product.id) }}"
-                                       class="h4 text-decoration-none text-center">{{ product.nombre_producto }}</a>
-                                    <div class="row mt-2">
-                                        <div class="col-md-4">
-                                            <img class="img-fluid profile-picture-mini"
-                                                 src="{{ url_for('static', filename='images/user-{}.jpg'.format(product.usuario.id)) }}"
-                                                 alt="User Image"
-                                                 style="width: 100px; height: 50px;">
-                                            <small>{{ product.usuario.username }}</small>
-                                        </div>
-                                        <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
-                                            <a href="{{ url_for('shop_single', id=product.id) }}"
-                                               class="h3 text-decoration-none">{{ product.usuario.calle.colonia.municipio.nombre_municipio }}</a>
-                                            <a><small>{{ product.usuario.calle.colonia.nombre_colonia }}</small></a>
+                        {% if product.cantidad > 0 %}
+                            <div class="col-md-4">
+                                <div class="card mb-4 product-wap rounded-0">
+                                    <div class="card rounded-0">
+                                        <img class="card-img rounded-0 img-fluid"
+                                             style="width: 500px; height: 300px;"
+                                             src="{{ url_for('static', filename='images/p-{}.jpg'.format(product.id)) }}">
+                                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                            <ul class="list-unstyled">
+                                                <li><a class="btn btn-success text-white mt-2"
+                                                       href="{{ url_for('shop_single', id=product.id) }}"><i
+                                                        class="far fa-eye"></i></a></li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <p class="text-center mb-0 mt-2">${{ product.precio }}</p>
+                                    <div class="card-body text-center">
+                                        <a href="{{ url_for('shop_single', id=product.id) }}"
+                                           class="h4 text-decoration-none text-center">{{ product.nombre_producto }}</a>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4">
+                                                <img class="img-fluid profile-picture-mini"
+                                                     src="{{ url_for('static', filename='images/user-{}.jpg'.format(product.usuario.id)) }}"
+                                                     alt="User Image"
+                                                     style="width: 100px; height: 50px;">
+                                                <small>{{ product.usuario.username }}</small>
+                                            </div>
+                                            <div class="col-md-8 d-flex flex-column align-items-center justify-content-center">
+                                                <a href="{{ url_for('shop_single', id=product.id) }}"
+                                                   class="h3 text-decoration-none">{{ product.usuario.calle.colonia.municipio.nombre_municipio }}</a>
+                                                <a><small>{{ product.usuario.calle.colonia.nombre_colonia }}</small></a>
+                                            </div>
+                                        </div>
+                                        <p class="text-center mb-0 mt-2">${{ product.precio }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
