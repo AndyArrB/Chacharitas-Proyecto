@@ -14,8 +14,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from os import getenv
 from dotenv import load_dotenv
 
-from app.triggers import create_triggers_if_not_exist
-
 load_dotenv()
 MYSQL_ROOT_PASSWORD = getenv("MYSQL_ROOT_PASSWORD")
 MYSQL_DATABASE = getenv("MYSQL_DATABASE")
@@ -28,9 +26,7 @@ app.config.from_object("app.config")
 if getenv("DOCKER") == "on":
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PASSWORD}@db/{MYSQL_DATABASE}'
 else:
-    # * Configuramos la conexión de la app hacia la base de datos
-    app.config[
-        'SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
 
 db.init_app(app)
 bootstrap = Bootstrap5(app)
@@ -38,7 +34,6 @@ babel = Babel(app)
 mail = Mail(app)
 
 fsqla.FsModels.set_db_info(db, "usuarios", "roles")
-
 
 class User(db.Model, fsqla_v3.FsUserMixin):
     __tablename__ = 'usuarios'
@@ -50,21 +45,89 @@ class User(db.Model, fsqla_v3.FsUserMixin):
     genero = db.relationship('Genero', backref=db.backref('usuarios', cascade='all, delete-orphan'))
     calle = db.relationship('Calle', backref=db.backref('usuarios', cascade='all, delete-orphan'))
 
-
 class Role(db.Model, fsqla_v3.FsRoleMixin):
     __tablename__ = "roles"
     id: Mapped[int] = mapped_column(primary_key=True)
-
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
 with app.app_context():
     db.create_all()
 
-    try:
-        create_triggers_if_not_exist()
+    trigger_names = [
+        "after_user_insert", "limit_user_products", "after_detalle_pedido_insert",
+        "log_cambios_producto", "update_fecha_renovacion"
+    ]
+    trigger_sqls = {
+        "after_user_insert": """
+            CREATE TRIGGER after_user_insert
+            AFTER INSERT ON usuarios
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO suscripciones (fecha_inicio, fecha_renovacion, id_cliente, id_tipo_suscripcion)
+                VALUES (CURRENT_DATE, NULL, NEW.id, 1);
+            END;
+        """,
+        "limit_user_products": """
+            CREATE TRIGGER limit_user_products
+            BEFORE INSERT ON productos
+            FOR EACH ROW
+            BEGIN
+                DECLARE product_count INT;
+                SELECT COUNT(*) INTO product_count FROM productos WHERE id_usuario = NEW.id_usuario;
+                IF (SELECT id_tipo_suscripcion FROM suscripciones WHERE id_cliente = NEW.id_usuario) = 1 AND product_count >= 3 THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario con suscripción ID 1 no puede tener más de 3 productos.';
+                END IF;
+            END;
+        """,
+        "after_detalle_pedido_insert": """
+            CREATE TRIGGER after_detalle_pedido_insert
+            AFTER INSERT ON detalles_pedidos
+            FOR EACH ROW
+            BEGIN
+                UPDATE productos SET cantidad = cantidad - NEW.cantidad WHERE id = NEW.id_producto;
+            END;
+        """,
+        "log_cambios_producto": """
+            CREATE TABLE IF NOT EXISTS cambios_producto (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                id_producto INT,
+                cantidad_antigua INT,
+                cantidad_nueva INT,
+                fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-        # Insert initial data if not already present
+            CREATE TRIGGER log_cambios_producto
+            AFTER UPDATE ON productos
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO cambios_producto (id_producto, cantidad_antigua, cantidad_nueva)
+                VALUES (OLD.id, OLD.cantidad, NEW.cantidad);
+            END;
+        """,
+        "update_fecha_renovacion": """
+            CREATE TRIGGER update_fecha_renovacion
+            AFTER UPDATE ON suscripciones
+            FOR EACH ROW
+            BEGIN
+                IF NEW.id_tipo_suscripcion != 1 THEN
+                    SET NEW.fecha_renovacion = DATE_ADD(NEW.fecha_inicio, INTERVAL 1 MONTH);
+                ELSE
+                    SET NEW.fecha_renovacion = NULL;
+                END IF;
+            END;
+        """
+    }
+
+    with db.engine.connect() as connection:
+        for trigger_name in trigger_names:
+            try:
+                connection.execute(text(trigger_sqls[trigger_name]))
+                print(f'Trigger {trigger_name} created successfully')
+            except:
+                print("Trigger existente")
+
+    try:
         for model, records in data.items():
             if model.__name__ == 'Producto':
                 continue
@@ -73,7 +136,6 @@ with app.app_context():
                 db.session.execute(insert(model), records)
         db.session.commit()
 
-        # Create root user and assign admin role if not already present
         admin_role = user_datastore.find_or_create_role("admin")
         root = user_datastore.find_user(username="root")
 
@@ -147,7 +209,6 @@ with app.app_context():
         print(f"Error al insertar datos: {e}")
         db.session.rollback()
 
-# * Implementamos Flask-Security a la app
 security = Security(app, user_datastore, register_form=ExtendedRegisterForm, confirm_register_form=ExtendedRegisterForm)
 
 from app import routes

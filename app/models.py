@@ -3,7 +3,7 @@ from flask_security.models import fsqla_v3
 from sqlalchemy.orm import Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+db = SQLAlchemy(engine_options={"pool_pre_ping": True, "pool_recycle": 300})
 
 class Municipio(db.Model):
     __tablename__ = 'municipios'
