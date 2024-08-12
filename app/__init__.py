@@ -56,14 +56,15 @@ class Role(db.Model, fsqla_v3.FsRoleMixin):
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
 with app.app_context():
+    # ! --------------------- Crear tablas --------------------------! #
     db.create_all()
 
+    # ! --------------------- Crear triggers ------------------------! #
     trigger_names = [
-        "after_user_insert", "limit_user_products", "after_detalle_pedido_insert","update_fecha_renovacion",
+        "after_user_insert", "limit_user_products", "after_detalle_pedido_insert", "update_fecha_renovacion",
         "log_cambios_producto", "lol"
     ]
     trigger_sqls = {
-
         "update_fecha_renovacion": """
             CREATE TRIGGER update_fecha_renovacion
             BEFORE UPDATE ON suscripciones
@@ -131,8 +132,86 @@ with app.app_context():
                 connection.execute(text(trigger_sqls[trigger_name]))
                 print(f'Trigger {trigger_name} created successfully')
             except:
-                print("Trigger existente")
+                print("....")
 
+    # ! --------------------- Crear vistas ------------------------! #
+    views_sql = {
+        "Vista_Clientes_Suscripciones_Activas": """
+            CREATE VIEW Vista_Clientes_Suscripciones_Activas AS
+            SELECT
+                u.username AS Nombre_Cliente,
+                u.email AS Email_Cliente,
+                ts.nombre_suscripcion AS Nombre_Suscripcion,
+                ts.precio AS Precio_Suscripcion,
+                s.fecha_inicio AS Fecha_Inicio_Suscripcion
+            FROM usuarios u
+            INNER JOIN suscripciones s ON s.id_cliente = u.id
+            INNER JOIN tipo_suscripciones ts ON ts.id = s.id_tipo_suscripcion
+            WHERE
+                CURDATE() BETWEEN s.fecha_inicio AND s.fecha_renovacion
+                AND ts.nombre_suscripcion IN ('Junior', 'VIP');
+        """,
+        "Vista_Productos_Por_Categoria": """
+            CREATE VIEW Vista_Productos_Por_Categoria AS
+            SELECT
+                c.tipo_categoria AS Categoria,
+                p.nombre_producto AS Nombre_Producto,
+                p.precio AS Precio_Producto,
+                p.cantidad AS Cantidad_Disponible
+            FROM productos p
+            INNER JOIN categorias c ON p.id_categoria = c.id
+            ORDER BY c.tipo_categoria ASC;
+        """,
+        "Vista_Ventas_Por_Cliente": """
+            CREATE VIEW Vista_Ventas_Por_Cliente AS
+            SELECT
+                u.username AS Nombre_Cliente,
+                p.fecha AS Fecha_Pedido,
+                SUM(dp.cantidad * pr.precio) AS Total_Ventas
+            FROM usuarios u
+            INNER JOIN pedidos p ON p.id_cliente = u.id
+            INNER JOIN detalles_pedidos dp ON dp.id_pedido = p.id
+            INNER JOIN productos pr ON dp.id_producto = pr.id
+            WHERE p.fecha BETWEEN '2023-01-01' AND '2024-12-31'
+            GROUP BY u.username, p.fecha;
+        """,
+        "Vista_Pedidos_Pendientes_Entrega": """
+            CREATE VIEW Vista_Pedidos_Pendientes_Entrega AS
+            SELECT
+                p.id AS Numero_Pedido,
+                e.nombre AS Estatus_Pedido,
+                pr.nombre_producto AS Producto,
+                u.username AS Nombre_Cliente,
+                p.fecha AS Fecha_Pedido
+            FROM pedidos p
+            INNER JOIN usuarios u ON p.id_cliente = u.id
+            INNER JOIN detalles_pedidos dp ON dp.id_pedido = p.id
+            INNER JOIN productos pr ON dp.id_producto = pr.id
+            INNER JOIN estatus e ON p.id_estatus = e.id
+            WHERE e.nombre = 'En Proceso';
+        """,
+        "Vista_Categorias_Con_Mas_Productos_Vendidos": """
+            CREATE VIEW Vista_Categorias_Con_Mas_Productos_Vendidos AS
+            SELECT
+                c.tipo_categoria AS Categoria,
+                COUNT(dp.id_producto) AS Total_Productos_Vendidos
+            FROM productos pr
+            INNER JOIN categorias c ON pr.id_categoria = c.id
+            INNER JOIN detalles_pedidos dp ON dp.id_producto = pr.id
+            GROUP BY c.tipo_categoria
+            ORDER BY Total_Productos_Vendidos DESC;
+        """
+    }
+
+    with db.engine.connect() as connection:
+        for view_name, view_sql in views_sql.items():
+            try:
+                connection.execute(text(view_sql))
+                print(f'View {view_name} created successfully')
+            except Exception as e:
+                print(f"....")
+
+# ! --------------------- Crear registros base ------------------------! #
     try:
         for model, records in data.items():
             if model.__name__ == 'Producto':
