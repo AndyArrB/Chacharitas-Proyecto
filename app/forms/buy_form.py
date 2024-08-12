@@ -18,8 +18,9 @@ class PaymentForm(FlaskForm):
     expiration_month = SelectField('Mes de Expiración', choices=month_choices, validators=[DataRequired()])
     expiration_year = SelectField('Año de Expiración', choices=year_choices, validators=[DataRequired()])
 
-    cvv = IntegerField('CVV', validators=[DataRequired(), NumberRange(min=100, max=999)])
-    amount = IntegerField('Amount', validators=[DataRequired()])
+    cvv = StringField('CVV', validators=[DataRequired(), Length(min=1,max=3), Regexp(r'^\d{3}$',
+                                                                      message="El CCV solo puede tener 3 numeros.")])
+    amount = IntegerField('Cantidad', validators=[DataRequired()])
     submit = SubmitField('Realizar compra')
 
     def __init__(self, id_producto, *args, **kwargs):

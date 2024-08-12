@@ -165,11 +165,11 @@ data = {
         {"nombre_producto": "Biberón de Estrellas", "cantidad": 10, "precio": 20, "id_categoria": 2, "id_color": 10,
          "id_material": 6, "id_detalle_tamaños": 9, "id_marca": 9, "id_genero": 2, "id_usuario": 7},
         {"nombre_producto": "Carreola", "cantidad": 4, "precio": 1000, "id_categoria": 2, "id_color": 2,
-         "id_material": 6, "id_detalle_tamaños": 10, "id_marca": 9, "id_genero": 1, "id_usuario":8},
+         "id_material": 6, "id_detalle_tamaños": 10, "id_marca": 9, "id_genero": 1, "id_usuario": 8},
         {"nombre_producto": "Pañalera", "cantidad": 3, "precio": 200, "id_categoria": 2, "id_color": 10,
          "id_material": 2, "id_detalle_tamaños": 9, "id_marca": 9, "id_genero": 1, "id_usuario": 9},
         {"nombre_producto": "Andadera", "cantidad": 4, "precio": 500, "id_categoria": 2, "id_color": 10,
-         "id_material": 6, "id_detalle_tamaños": 10, "id_marca": 8, "id_genero": 2, "id_usuario":10},
+         "id_material": 6, "id_detalle_tamaños": 10, "id_marca": 8, "id_genero": 2, "id_usuario": 10},
         {"nombre_producto": "Sombrero del Sol", "cantidad": 5, "precio": 100, "id_categoria": 2, "id_color": 4,
          "id_material": 4, "id_detalle_tamaños": 4, "id_marca": 4, "id_genero": 2, "id_usuario": 1},
         {"nombre_producto": "Bufanda de Otoño", "cantidad": 8, "precio": 200, "id_categoria": 2, "id_color": 5,
@@ -190,5 +190,18 @@ data = {
          "id_material": 5, "id_detalle_tamaños": 5, "id_marca": 5, "id_genero": 1, "id_usuario": 9},
         {"nombre_producto": "Biberón de Estrellas", "cantidad": 30, "precio": 100, "id_categoria": 5, "id_color": 7,
          "id_material": 2, "id_detalle_tamaños": 2, "id_marca": 2, "id_genero": 1, "id_usuario": 10},
+    ],
+    Pedido: [
+        {"fecha": "2024-08-12", "id_cliente": 2, "id_estatus": 1, "id_forma_pago": 1},
+        {"fecha": "2024-08-13", "id_cliente": 6, "id_estatus": 1, "id_forma_pago": 2},
+        {"fecha": "2024-08-11", "id_cliente": 3, "id_estatus": 1, "id_forma_pago": 3},
+        {"fecha": "2024-08-02", "id_cliente": 4, "id_estatus": 1, "id_forma_pago": 1}
+    ],
+    DetallePedido: [
+        {"cantidad": 1, "id_producto": 7, "id_pedido": 1},
+        {"cantidad": 1, "id_producto": 11, "id_pedido": 2},
+        {"cantidad": 1, "id_producto": 16, "id_pedido": 3},
+        {"cantidad": 1, "id_producto": 2, "id_pedido": 4}
     ]
+
 }

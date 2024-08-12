@@ -281,7 +281,7 @@ with app.app_context():
 # ! --------------------- Crear registros base ------------------------! #
     try:
         for model, records in data.items():
-            if model.__name__ == 'Producto':
+            if model.__name__ == 'Producto' or model.__name__ == "Pedido" or model.__name__ == "DetallePedido":
                 continue
             if not db.session.query(model).count():
                 print("Evaluando a ", model)
@@ -350,12 +350,12 @@ with app.app_context():
         db.session.commit()
 
         for model, records in data.items():
-            if model.__name__ != 'Producto':
-                continue
             if not db.session.query(model).count():
                 print("Evaluando a ", model)
                 db.session.execute(insert(model), records)
         db.session.commit()
+
+
 
     except SQLAlchemyError as e:
         print(f"Error al insertar datos: {e}")

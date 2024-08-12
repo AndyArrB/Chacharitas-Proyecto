@@ -118,7 +118,7 @@ def payment(id):
         db.database.session.add(detalle_pedido)
         db.database.session.commit()
 
-        redirect(url_for('shop'))
+        return redirect(url_for('shop'))
 
     product = Producto.query \
         .join(User, Producto.id_usuario == User.id) \
