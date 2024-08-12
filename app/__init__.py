@@ -26,7 +26,8 @@ app.config.from_object("app.config")
 if getenv("DOCKER") == "on":
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PASSWORD}@db/{MYSQL_DATABASE}'
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
+    app.config[
+        'SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{MYSQL_USERNAME}:{MYSQL_ROOT_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
 
 db.init_app(app)
 bootstrap = Bootstrap5(app)
@@ -34,6 +35,7 @@ babel = Babel(app)
 mail = Mail(app)
 
 fsqla.FsModels.set_db_info(db, "usuarios", "roles")
+
 
 class User(db.Model, fsqla_v3.FsUserMixin):
     __tablename__ = 'usuarios'
@@ -45,9 +47,11 @@ class User(db.Model, fsqla_v3.FsUserMixin):
     genero = db.relationship('Genero', backref=db.backref('usuarios', cascade='all, delete-orphan'))
     calle = db.relationship('Calle', backref=db.backref('usuarios', cascade='all, delete-orphan'))
 
+
 class Role(db.Model, fsqla_v3.FsRoleMixin):
     __tablename__ = "roles"
     id: Mapped[int] = mapped_column(primary_key=True)
+
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -55,10 +59,23 @@ with app.app_context():
     db.create_all()
 
     trigger_names = [
-        "after_user_insert", "limit_user_products", "after_detalle_pedido_insert",
-        "log_cambios_producto", "update_fecha_renovacion"
+        "after_user_insert", "limit_user_products", "after_detalle_pedido_insert","update_fecha_renovacion",
+        "log_cambios_producto", "lol"
     ]
     trigger_sqls = {
+
+        "update_fecha_renovacion": """
+            CREATE TRIGGER update_fecha_renovacion
+            BEFORE UPDATE ON suscripciones
+            FOR EACH ROW
+            BEGIN
+                IF NEW.id_tipo_suscripcion != 1 THEN
+                    SET NEW.fecha_renovacion = DATE_ADD(NEW.fecha_inicio, INTERVAL 1 MONTH);
+                ELSE
+                    SET NEW.fecha_renovacion = NULL;
+                END IF;
+            END;
+        """,
         "after_user_insert": """
             CREATE TRIGGER after_user_insert
             AFTER INSERT ON usuarios
@@ -96,25 +113,14 @@ with app.app_context():
                 cantidad_nueva INT,
                 fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-
+        """,
+        "lol": """
             CREATE TRIGGER log_cambios_producto
             AFTER UPDATE ON productos
             FOR EACH ROW
             BEGIN
                 INSERT INTO cambios_producto (id_producto, cantidad_antigua, cantidad_nueva)
                 VALUES (OLD.id, OLD.cantidad, NEW.cantidad);
-            END;
-        """,
-        "update_fecha_renovacion": """
-            CREATE TRIGGER update_fecha_renovacion
-            AFTER UPDATE ON suscripciones
-            FOR EACH ROW
-            BEGIN
-                IF NEW.id_tipo_suscripcion != 1 THEN
-                    SET NEW.fecha_renovacion = DATE_ADD(NEW.fecha_inicio, INTERVAL 1 MONTH);
-                ELSE
-                    SET NEW.fecha_renovacion = NULL;
-                END IF;
             END;
         """
     }
