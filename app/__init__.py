@@ -61,12 +61,13 @@ with app.app_context():
 
     # ! --------------------- Crear triggers ------------------------! #
     trigger_names = [
-        "after_user_insert", "limit_user_products", "after_detalle_pedido_insert", "update_fecha_renovacion",
-        "log_cambios_producto", "lol"
+        "tr_after_user_insert", "tr_limit_user_products", "tr_after_detalle_pedido_insert",
+        "tr_update_fecha_renovacion",
+        "tr_log_cambios_producto", "tr_complement"
     ]
     trigger_sqls = {
-        "update_fecha_renovacion": """
-            CREATE TRIGGER update_fecha_renovacion
+        "tr_update_fecha_renovacion": """
+            CREATE TRIGGER tr_update_fecha_renovacion
             BEFORE UPDATE ON suscripciones
             FOR EACH ROW
             BEGIN
@@ -77,8 +78,8 @@ with app.app_context():
                 END IF;
             END;
         """,
-        "after_user_insert": """
-            CREATE TRIGGER after_user_insert
+        "tr_after_user_insert": """
+            CREATE TRIGGER tr_after_user_insert
             AFTER INSERT ON usuarios
             FOR EACH ROW
             BEGIN
@@ -86,8 +87,8 @@ with app.app_context():
                 VALUES (CURRENT_DATE, NULL, NEW.id, 1);
             END;
         """,
-        "limit_user_products": """
-            CREATE TRIGGER limit_user_products
+        "tr_limit_user_products": """
+            CREATE TRIGGER tr_limit_user_products
             BEFORE INSERT ON productos
             FOR EACH ROW
             BEGIN
@@ -98,15 +99,15 @@ with app.app_context():
                 END IF;
             END;
         """,
-        "after_detalle_pedido_insert": """
-            CREATE TRIGGER after_detalle_pedido_insert
+        "tr_after_detalle_pedido_insert": """
+            CREATE TRIGGER tr_after_detalle_pedido_insert
             AFTER INSERT ON detalles_pedidos
             FOR EACH ROW
             BEGIN
                 UPDATE productos SET cantidad = cantidad - NEW.cantidad WHERE id = NEW.id_producto;
             END;
         """,
-        "log_cambios_producto": """
+        "tr_log_cambios_producto": """
             CREATE TABLE IF NOT EXISTS cambios_producto (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 id_producto INT,
@@ -115,8 +116,8 @@ with app.app_context():
                 fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """,
-        "lol": """
-            CREATE TRIGGER log_cambios_producto
+        "tr_complement": """
+            CREATE TRIGGER tr_log_cambios_producto
             AFTER UPDATE ON productos
             FOR EACH ROW
             BEGIN
@@ -136,8 +137,8 @@ with app.app_context():
 
     # ! --------------------- Crear vistas ------------------------! #
     views_sql = {
-        "Vista_Clientes_Suscripciones_Activas": """
-            CREATE VIEW Vista_Clientes_Suscripciones_Activas AS
+        "view_usuarios_suscripciones_activas": """
+            CREATE VIEW view_clientes_suscripciones_activas AS
             SELECT
                 u.username AS Nombre_Cliente,
                 u.email AS Email_Cliente,
@@ -151,8 +152,8 @@ with app.app_context():
                 CURDATE() BETWEEN s.fecha_inicio AND s.fecha_renovacion
                 AND ts.nombre_suscripcion IN ('Junior', 'VIP');
         """,
-        "Vista_Productos_Por_Categoria": """
-            CREATE VIEW Vista_Productos_Por_Categoria AS
+        "view_productos_por_categoria": """
+            CREATE VIEW view_productos_por_categoria AS
             SELECT
                 c.tipo_categoria AS Categoria,
                 p.nombre_producto AS Nombre_Producto,
@@ -162,8 +163,8 @@ with app.app_context():
             INNER JOIN categorias c ON p.id_categoria = c.id
             ORDER BY c.tipo_categoria ASC;
         """,
-        "Vista_Ventas_Por_Cliente": """
-            CREATE VIEW Vista_Ventas_Por_Cliente AS
+        "view_ventas_por_cliente": """
+            CREATE VIEW view_ventas_por_cliente AS
             SELECT
                 u.username AS Nombre_Cliente,
                 p.fecha AS Fecha_Pedido,
@@ -175,8 +176,8 @@ with app.app_context():
             WHERE p.fecha BETWEEN '2023-01-01' AND '2024-12-31'
             GROUP BY u.username, p.fecha;
         """,
-        "Vista_Pedidos_Pendientes_Entrega": """
-            CREATE VIEW Vista_Pedidos_Pendientes_Entrega AS
+        "view_pedidos_pendientes_entrega": """
+            CREATE VIEW view_pedidos_pendientes_entrega AS
             SELECT
                 p.id AS Numero_Pedido,
                 e.nombre AS Estatus_Pedido,
@@ -190,8 +191,8 @@ with app.app_context():
             INNER JOIN estatus e ON p.id_estatus = e.id
             WHERE e.nombre = 'En Proceso';
         """,
-        "Vista_Categorias_Con_Mas_Productos_Vendidos": """
-            CREATE VIEW Vista_Categorias_Con_Mas_Productos_Vendidos AS
+        "view_categorias_con_mas_productos_vendidos": """
+            CREATE VIEW view_categorias_con_mas_productos_vendidos AS
             SELECT
                 c.tipo_categoria AS Categoria,
                 COUNT(dp.id_producto) AS Total_Productos_Vendidos
@@ -210,6 +211,72 @@ with app.app_context():
                 print(f'View {view_name} created successfully')
             except Exception as e:
                 print(f"....")
+
+    # ! --------------------- Crear procedimientos  ------------------------! #
+    stored_procedures_sql = {
+        "sp_obtener_ventas_totales_por_cliente": """
+            CREATE PROCEDURE sp_obtener_ventas_totales_por_cliente(IN id_cliente INT)
+            BEGIN
+                SELECT u.username AS Nombre_Cliente, SUM(dp.cantidad * pr.precio) AS Total_Ventas
+                FROM usuarios u
+                INNER JOIN pedidos p ON p.id_cliente = u.id
+                INNER JOIN detalles_pedidos dp ON dp.id_pedido = p.id
+                INNER JOIN productos pr ON dp.id_producto = pr.id
+                WHERE u.id = id_cliente
+                GROUP BY u.username;
+            END;
+        """,
+        "sp_obtener_productos_por_categoria": """
+            CREATE PROCEDURE sp_obtener_productos_por_categoria(IN id_categoria INT)
+            BEGIN
+                SELECT p.nombre_producto AS Nombre_Producto, p.precio AS Precio_Producto, p.cantidad AS Cantidad_Disponible
+                FROM productos p
+                WHERE p.id_categoria = id_categoria;
+            END;
+        """,
+        "sp_obtener_pedidos_pendientes_por_cliente": """
+            CREATE PROCEDURE sp_obtener_pedidos_pendientes_por_cliente(IN id_cliente INT)
+            BEGIN
+                SELECT p.id AS Numero_Pedido, e.nombre AS Estatus_Pedido, pr.nombre_producto AS Producto, p.fecha AS Fecha_Pedido
+                FROM pedidos p
+                INNER JOIN detalles_pedidos dp ON dp.id_pedido = p.id
+                INNER JOIN productos pr ON dp.id_producto = pr.id
+                INNER JOIN estatus e ON p.id_estatus = e.id
+                WHERE p.id_cliente = id_cliente AND e.nombre = 'En Proceso';
+            END;
+        """,
+        "sp_obtener_categorias_mas_vendidas_por_fecha": """
+            CREATE PROCEDURE sp_obtener_categorias_mas_vendidas_por_fecha(IN fecha_inicio DATE, IN fecha_fin DATE)
+            BEGIN
+                SELECT c.tipo_categoria AS Categoria, COUNT(dp.id_producto) AS Total_Productos_Vendidos
+                FROM productos pr
+                INNER JOIN categorias c ON pr.id_categoria = c.id
+                INNER JOIN detalles_pedidos dp ON dp.id_producto = pr.id
+                INNER JOIN pedidos p ON dp.id_pedido = p.id
+                WHERE p.fecha BETWEEN fecha_inicio AND fecha_fin
+                GROUP BY c.tipo_categoria
+                ORDER BY Total_Productos_Vendidos DESC;
+            END;
+        """,
+        "sp_obtener_suscripciones_activas_por_tipo": """
+            CREATE PROCEDURE sp_obtener_suscripciones_activas_por_tipo(IN tipo_suscripcion VARCHAR(50))
+            BEGIN
+                SELECT u.username AS Nombre_Cliente, u.email AS Email_Cliente, ts.nombre_suscripcion AS Nombre_Suscripcion, ts.precio AS Precio_Suscripcion, s.fecha_inicio AS Fecha_Inicio_Suscripcion
+                FROM usuarios u
+                INNER JOIN suscripciones s ON s.id_cliente = u.id
+                INNER JOIN tipo_suscripciones ts ON ts.id = s.id_tipo_suscripcion
+                WHERE CURDATE() BETWEEN s.fecha_inicio AND s.fecha_renovacion AND ts.nombre_suscripcion = tipo_suscripcion;
+            END;
+        """
+    }
+
+    with db.engine.connect() as connection:
+        for proc_name, proc_sql in stored_procedures_sql.items():
+            try:
+                connection.execute(text(proc_sql))
+                print(f'Stored procedure {proc_name} created successfully')
+            except Exception as e:
+                print(f"...")
 
 # ! --------------------- Crear registros base ------------------------! #
     try:
